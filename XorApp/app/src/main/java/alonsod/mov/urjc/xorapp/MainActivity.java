@@ -56,10 +56,13 @@ public class MainActivity extends AppCompatActivity {
             boolean C = arraytog[2].isChecked();
             boolean D = arraytog[3].isChecked();
 
+            Toast msg;
             if(SalidaBuena(A , B) && !SalidaMala(C, D)){
-                Toast msg = Toast.makeText(MainActivity.this, "You Win!", time);
-                msg.show();
+                msg = Toast.makeText(MainActivity.this, "Enhorabuena, has completado el nivel 0", time);
+            }else{
+                msg = Toast.makeText(MainActivity.this, "Lo siento, el resultado no es correcto", time);
             }
+            msg.show();
         }
     }
 

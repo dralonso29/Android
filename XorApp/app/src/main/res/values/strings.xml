@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">XorApp</string>
     <string name="summitBut">Avanzar Nivel</string>
-    <string name="level0">Tutorial: El objetivo del juego es que salga en la cara sonriente un 1 y en la enfadada un 0.
+    <string name="level0">Nivel 0: El objetivo del juego es que salga en la cara sonriente un 1 y en la enfadada un 0.
         ¿Como se consigue eso? Para ello deberás meter en cada entrada (A, B, C y D) un 0 o un 1. La elección es binaria.
         La puerta con las entradas A y B es una puerta AND, que multiplica el valor que se le haya asignado a las entradas
         A y B. Por ejemplo, si A = 1 y B = 0, la salida será el resultado de multiplicar 1 por 0.
         La puerta lógica con forma triangular se llama NOT y su función es negar todo lo que le llegue. Eso quiere decir que si le
         llega un 1 lo convierte en un 0 y viceversa. Por último, la puerta con entradas C y D se llama OR. Es parecida a la AND pero
-        en vez de multiplicar, suma el valor de las entradas. ¡Ojo! Si sunas 1 + 1 no da 2, sino 0 (Recuerda que estamos en
-        base 2 (binario))¡Suerte!</string>
+        en vez de multiplicar, suma el valor de las entradas. ¡Ojo! Si sumas 1 + 1 no da 2, sino 0 (Recuerda que estamos en
+        base 2 (binario)) ¡Suerte!</string>
 
 </resources>

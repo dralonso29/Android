@@ -2,13 +2,14 @@ package alonsod.mov.urjc.xorapp;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     LinearLayout lay;
     int NTOGGLES = 4;

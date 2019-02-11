@@ -12,21 +12,21 @@
         android:layout_height="wrap_content"
         android:text="Nivel 0"
         android:layout_gravity="center"
-        android:textSize="40dp"/>
+        android:textSize="30sp"/>
 
-    <ImageButton
+    <!--<ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_info2"
         android:onClick="info"
-        android:background="@android:color/transparent"/>
+        android:background="@android:color/transparent"/> -->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/level0"
         android:id="@+id/infolevel0"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:typeface="monospace"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item
+        android:id="@+id/entrada"
+        android:title="@string/levels">
+        <menu>
+            <item
+                android:id="@+id/create_new0"
+                android:title="Level 0" />
+            <item
+                android:id="@+id/create_new1"
+                android:title="Level 1" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/help"
+        android:title="Ayuda" />
+</menu>

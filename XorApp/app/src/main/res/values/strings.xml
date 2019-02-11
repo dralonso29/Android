@@ -9,5 +9,6 @@
         llega un 1 lo convierte en un 0 y viceversa. Por último, la puerta con entradas C y D se llama OR. Es parecida a la AND pero
         en vez de multiplicar, suma el valor de las entradas. ¡Ojo! Si sumas 1 + 1 no da 2, sino 0 (Recuerda que estamos en
         base 2 (binario)) ¡Suerte!</string>
+    <string name="levels">Levels</string>
 
 </resources>

@@ -2,6 +2,9 @@ package alonsod.mov.urjc.xorapp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public void info(View view) {
         TextView infotxt = (TextView) findViewById(R.id.infolevel0);
         if (infotxt.getVisibility() == View.VISIBLE) {
-            infotxt.setVisibility(View.INVISIBLE);
+            infotxt.setVisibility(View.GONE);
         }else {
             infotxt.setVisibility(View.VISIBLE);
         }
@@ -79,5 +82,26 @@ public class MainActivity extends AppCompatActivity {
         }
         Button nextbut = (Button) findViewById(R.id.nextbut);
         nextbut.setOnClickListener(new NextButt(arraytog));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.conf, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.help:
+                View helpbutton = findViewById(R.id.help);
+                info(helpbutton);
+                //int time = Toast.LENGTH_SHORT;
+                //Toast msg =  Toast.makeText(MainActivity.this, "Pulsaste la ayuda loco", time);
+                //msg.show();
+                return true;
+            default:
+                return true;
+        }
     }
 }

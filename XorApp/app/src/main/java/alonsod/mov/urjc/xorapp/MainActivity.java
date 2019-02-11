@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import static java.lang.System.exit;
+
 public class MainActivity extends AppCompatActivity {
 
     LinearLayout lay;
@@ -83,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
         Button nextbut = (Button) findViewById(R.id.nextbut);
         nextbut.setOnClickListener(new NextButt(arraytog));
     }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        exit(0);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -96,10 +103,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.help:
                 View helpbutton = findViewById(R.id.help);
                 info(helpbutton);
-                //int time = Toast.LENGTH_SHORT;
-                //Toast msg =  Toast.makeText(MainActivity.this, "Pulsaste la ayuda loco", time);
-                //msg.show();
                 return true;
+            case R.id.exit:
+                onPause();
             default:
                 return true;
         }

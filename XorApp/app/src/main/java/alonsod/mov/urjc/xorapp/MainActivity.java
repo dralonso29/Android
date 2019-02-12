@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.exit:
                 onPause();
             default:
-                return true;
+                return super.onOptionsItemSelected(item);
         }
     }
 }

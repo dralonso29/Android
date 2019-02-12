@@ -6,10 +6,10 @@
         android:title="@string/levels">
         <menu>
             <item
-                android:id="@+id/create_new0"
+                android:id="@+id/menu_level0"
                 android:title="Level 0" />
             <item
-                android:id="@+id/create_new1"
+                android:id="@+id/menu_level1"
                 android:title="Level 1" />
         </menu>
     </item>

@@ -8,9 +8,9 @@
     android:id="@+id/myLayout"
     tools:context=".MainActivity">
     <TextView
+        android:id="@+id/level_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nivel 0"
         android:layout_gravity="center"
         android:textSize="30sp"/>
 
@@ -42,12 +42,13 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/img_level"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:layout_margin="@android:dimen/app_icon_size"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_level1plane5"/>
+        android:layout_gravity="center"/>
+        <!--android:src="@drawable/ic_level1"-->
 
     <Button
         android:layout_width="wrap_content"

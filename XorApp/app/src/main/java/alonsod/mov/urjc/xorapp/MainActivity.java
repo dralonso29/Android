@@ -22,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout lay;
     int NTOGGLES = 4;
     int NLEVEL;
+    int MAXLEVELS = 2;
     ToggleButton arraytog[];
+    Level arraylevels[];
+
     public void createButtons(LinearLayout lay, int i, char entry, ToggleButton array[]) {
         ToggleButton toggle = new ToggleButton(this);
         toggle.setTextOff(Character.toString(entry));
@@ -34,13 +37,12 @@ public class MainActivity extends AppCompatActivity {
         array[i] = toggle;
     }
 
-    public boolean SalidaBuena(boolean A, boolean B) {
+    /*public boolean SalidaBuena(boolean A, boolean B) {
         return !(A && B);
     }
-
     public boolean SalidaMala(boolean C, boolean D) {
         return !(C || D);
-    }
+    }*/
 
     public void info(View view) {
         TextView infotxt = (TextView) findViewById(R.id.infolevel0);
@@ -59,20 +61,25 @@ public class MainActivity extends AppCompatActivity {
 
     class NextButt implements View.OnClickListener {
         ToggleButton arraytog[];
-        NextButt(ToggleButton arr[]) {
+        Level arraylevels[];
+        NextButt(ToggleButton arr[], Level levels[]) {
             arraytog = arr;
+            arraylevels = levels;
         }
 
         @Override
         public void onClick(View v) {
             int time = Toast.LENGTH_SHORT;
+            Level mylev;
             boolean A = arraytog[0].isChecked();
             boolean B = arraytog[1].isChecked();
             boolean C = arraytog[2].isChecked();
             boolean D = arraytog[3].isChecked();
 
+            mylev = LevelFactory.produce(NLEVEL);
+
             Toast msg;
-            if(SalidaBuena(A , B) && !SalidaMala(C, D)){
+            if(mylev.SalidaBuena(A , B, C, D) && !mylev.SalidaMala(A , B, C, D)){
                 msg = Toast.makeText(MainActivity.this, "Enhorabuena, pasas al siguiente nivel!", time);
                 resetButtons(arraytog);
                 NLEVEL++;
@@ -101,15 +108,25 @@ public class MainActivity extends AppCompatActivity {
         char s;
         NLEVEL = 0;
         arraytog = new ToggleButton[NTOGGLES];
+        arraylevels = new Level[MAXLEVELS];
         lay = findViewById(R.id.linearToggle);
         for (int i=0;i<NTOGGLES;i++) {
             s = (char) ('A' + i);
             createButtons(lay, i, s, arraytog);
         }
+        createLevels(MAXLEVELS, arraylevels);
         setLevel(NLEVEL);
         Button nextbut = (Button) findViewById(R.id.nextbut);
-        nextbut.setOnClickListener(new NextButt(arraytog));
+        nextbut.setOnClickListener(new NextButt(arraytog, arraylevels));
     }
+
+    private void createLevels(int maxlevels, Level arraylevels[]) {
+        for(int i = 0;i < maxlevels; i++){
+            arraylevels[i] = LevelFactory.produce(i); {
+            }
+        }
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -130,11 +147,13 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_level0:
                 msg = Toast.makeText(MainActivity.this, "Estas en el nivel 0", time);
                 msg.show();
+                NLEVEL = 0;
                 setLevel(0);
                 return true;
             case R.id.menu_level1:
                 msg = Toast.makeText(MainActivity.this, "Estas en el nivel 1", time);
                 msg.show();
+                NLEVEL = 1;
                 setLevel(1);
                 return true;
             case R.id.help:

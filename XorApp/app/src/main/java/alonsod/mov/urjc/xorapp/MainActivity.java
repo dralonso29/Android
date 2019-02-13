@@ -1,7 +1,5 @@
 package alonsod.mov.urjc.xorapp;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -14,8 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import static java.lang.System.exit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             mylev = LevelFactory.produce(NLEVEL);
 
             Toast msg;
+            Button next = findViewById(R.id.nextbut);
             if(mylev.SalidaBuena(A , B, C, D) && !mylev.SalidaMala(A, B, C, D)){
                 NLEVEL++;
                 if (NLEVEL < MAXLEVELS) {
@@ -80,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
                     setLevel(NLEVEL);
                 }else{
                     msg = Toast.makeText(MainActivity.this, "HAS COMPLETADO TODOS LOS NIVELES!", time);
-                    Button next = findViewById(R.id.nextbut);
                     next.setVisibility(View.GONE);
                 }
             }else{
@@ -126,28 +122,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.conf, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int time = Toast.LENGTH_SHORT;
         Toast msg;
+        Button next = findViewById(R.id.nextbut);
         switch (item.getItemId()) {
             case R.id.menu_level0:
                 msg = Toast.makeText(MainActivity.this, "Estas en el nivel 0", time);
                 msg.show();
                 NLEVEL = 0;
                 setLevel(0);
+                next.setVisibility(View.VISIBLE);
                 return true;
             case R.id.menu_level1:
                 msg = Toast.makeText(MainActivity.this, "Estas en el nivel 1", time);
                 msg.show();
                 NLEVEL = 1;
+                next.setVisibility(View.VISIBLE);
                 setLevel(1);
                 return true;
             case R.id.help:

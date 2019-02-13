@@ -24,11 +24,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void createButtons(LinearLayout lay, int i, char entry, ToggleButton array[]) {
         ToggleButton toggle = new ToggleButton(this);
-        toggle.setTextOff(Character.toString(entry));
-        toggle.setTextOn(Character.toString(entry));
+        toggle.setTextOff(Character.toString(entry) + " = 0");
+        toggle.setTextOn(Character.toString(entry) + " = 1");
         toggle.setChecked(false);
         toggle.setId(i);
-        toggle.setText(Character.toString(entry));
         lay.addView(toggle);
         array[i] = toggle;
     }

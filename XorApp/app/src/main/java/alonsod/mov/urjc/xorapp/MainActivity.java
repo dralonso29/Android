@@ -37,13 +37,6 @@ public class MainActivity extends AppCompatActivity {
         array[i] = toggle;
     }
 
-    /*public boolean SalidaBuena(boolean A, boolean B) {
-        return !(A && B);
-    }
-    public boolean SalidaMala(boolean C, boolean D) {
-        return !(C || D);
-    }*/
-
     public void info(View view) {
         TextView infotxt = (TextView) findViewById(R.id.infolevel0);
         if (infotxt.getVisibility() == View.VISIBLE) {
@@ -79,11 +72,17 @@ public class MainActivity extends AppCompatActivity {
             mylev = LevelFactory.produce(NLEVEL);
 
             Toast msg;
-            if(mylev.SalidaBuena(A , B, C, D) && !mylev.SalidaMala(A , B, C, D)){
-                msg = Toast.makeText(MainActivity.this, "Enhorabuena, pasas al siguiente nivel!", time);
-                resetButtons(arraytog);
+            if(mylev.SalidaBuena(A , B, C, D) && !mylev.SalidaMala(A, B, C, D)){
                 NLEVEL++;
-                setLevel(NLEVEL);
+                if (NLEVEL < MAXLEVELS) {
+                    msg = Toast.makeText(MainActivity.this, "Enhorabuena, " + mylev.getLevelName() + " completado!", time);
+                    resetButtons(arraytog);
+                    setLevel(NLEVEL);
+                }else{
+                    msg = Toast.makeText(MainActivity.this, "HAS COMPLETADO TODOS LOS NIVELES!", time);
+                    Button next = findViewById(R.id.nextbut);
+                    next.setVisibility(View.GONE);
+                }
             }else{
                 msg = Toast.makeText(MainActivity.this, "Lo siento, el resultado no es correcto", time);
             }
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         imgv.setImageResource(id);
 
         TextView header = (TextView) findViewById(R.id.level_header);
-        header.setText("Level " + nlevel);
+        header.setText("Nivel " + nlevel);
     }
 
     @Override
@@ -127,11 +126,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        exit(0);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -160,8 +154,6 @@ public class MainActivity extends AppCompatActivity {
                 View helpbutton = findViewById(R.id.help);
                 info(helpbutton);
                 return true;
-            case R.id.exit:
-                onPause();
             default:
                 return super.onOptionsItemSelected(item);
         }

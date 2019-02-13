@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/entrada"
-        android:title="@string/levels">
-        <menu>
-            <item
-                android:id="@+id/menu_level0"
-                android:title="Level 0" />
-            <item
-                android:id="@+id/menu_level1"
-                android:title="Level 1" />
-        </menu>
-    </item>
 
     <item
-    android:id="@+id/exit"
-    android:title="@string/exit"/>
+        android:id="@+id/menu_level0"
+        android:title="Nivel 0" />
+    <item
+        android:id="@+id/menu_level1"
+        android:title="Nivel 1" />
 
     <item
         android:id="@+id/help"

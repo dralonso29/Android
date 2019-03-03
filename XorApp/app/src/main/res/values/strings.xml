@@ -6,7 +6,7 @@
         Deberás meter en cada entrada un 0 o un 1, pulsando los botones que tienes a tu disposición.
         Si el boton tiene una luz de color roja, indica que en esa entrada hay un 1. Si esta apagada, hay un 0.\n
         •Puerta AND, devuelve la MULTIPLICACIÓN de sus entradas.\n
-        •Puerta OR, devuelve la SUMA de sus entradas.\n
+        •Puerta OR, devuelve 1 a no ser que sus entradas valgan 0.\n
         •Puerta NOT, devuelve el NEGADO de su entrada.\n
         ¡Buena suerte!\nPD: Diferentes combinaciones de entradas pueden dar la solución.</string>
     <string name="levels">Levels</string>

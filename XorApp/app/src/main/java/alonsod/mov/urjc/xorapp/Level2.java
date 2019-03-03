@@ -9,12 +9,12 @@ import static alonsod.mov.urjc.xorapp.LevelFactory.MAXTOGGLES;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class Level1 extends Level {
+public class Level2 extends Level {
     int level;
     int visiblebuttons;
-    public Level1(int nlevel) {
+    public Level2(int nlevel) {
         level = nlevel;
-        visiblebuttons = 4;
+        visiblebuttons = 3;
     }
 
     public String getLevelName() { return "nivel " + level;}
@@ -42,10 +42,19 @@ public class Level1 extends Level {
         }
     }
     public boolean SalidaBuena(Boolean entradas[]) {
-        Log.d("SalidaBuena","nivel1");
-        return (entradas[0] && entradas[1]) || (entradas[2] || entradas[3]);
+        Log.d("SalidaBuena","Salida buena");
+        Log.d("SalidaBuena","A --> " + entradas[0]);
+        Log.d("SalidaBuena","B --> " + entradas[1]);
+        Log.d("SalidaBuena","C --> " + entradas[2]);
+        Log.d("SalidaBuena", ""+(((!entradas[0]) && entradas[1]) && ((!entradas[2]) || entradas[1]))+"\n");
+        return ((!entradas[0]) && entradas[1]) && ((!entradas[2]) || entradas[1]);
     }
     public boolean SalidaMala(Boolean entradas[]) {
-        return !((entradas[0] && entradas[1]) && (entradas[2] || entradas[3]));
+        Log.d("SalidaMala","Salida mala");
+        Log.d("SalidaMala","A --> " + entradas[0]);
+        Log.d("SalidaMala","B --> " + entradas[1]);
+        Log.d("SalidaMala","C --> " + entradas[2]);
+        Log.d("SalidaMala", ""+!((!entradas[2]) || entradas[1])+"\n");
+        return !((!entradas[2]) || entradas[1]);
     }
 }

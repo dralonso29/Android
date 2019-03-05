@@ -1,6 +1,7 @@
 package alonsod.mov.urjc.xorapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -226,10 +227,10 @@ public class MainActivity extends AppCompatActivity {
                 next.setOnClickListener(new NextButt(prep, level, lf));
                 next.setVisibility(View.VISIBLE);
                 return true;
-            /*case R.id.help:
-                View helpbutton = findViewById(R.id.help);
-                info(helpbutton);
-                return true;*/
+            case R.id.help:
+                Intent help = new Intent(MainActivity.this, Help.class);
+                startActivity(help);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

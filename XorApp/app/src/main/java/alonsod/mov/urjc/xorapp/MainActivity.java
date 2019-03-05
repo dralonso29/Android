@@ -21,19 +21,10 @@ import static alonsod.mov.urjc.xorapp.LevelFactory.MAXTOGGLES;
 
 public class MainActivity extends AppCompatActivity {
 
-    //LinearLayout lay;
-    //int NTOGGLES = 4;
-    //int NLEVEL;
-    //int MAXLEVELS = 2;
-    //ToggleButton arraytog[];
-    //Level arraylevels[];
-
-
     public class PrepareLevel {
         int NLEVEL;
         LinearLayout lay;
         ToggleButton arraytog[];
-        Level arraylevels[];
         char TOGGNAME;
         Boolean[] entradas;
         int[] imagesid;
@@ -53,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
                 toggle.setTextOff(Character.toString((char) (TOGGNAME+i)) + " = 0");
                 toggle.setTextOn(Character.toString((char) (TOGGNAME+i)) + " = 1");
                 toggle.setChecked(false);
-                //toggle.setId(i);
                 lay.addView(toggle);
                 arraytog[i] = toggle;
             }
@@ -84,21 +74,6 @@ public class MainActivity extends AppCompatActivity {
     PrepareLevel prep;
     LevelFactory lf;
 
-    /*public void info(View view) {
-        TextView infotxt = (TextView) findViewById(R.id.infolevel0);
-        if (infotxt.getVisibility() == View.VISIBLE) {
-            infotxt.setVisibility(View.GONE);
-        }else {
-            infotxt.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void resetButtons(ToggleButton but[]) {
-        for (int i = 0; i < NTOGGLES; i++) {
-            but[i].setChecked(false);
-        }
-    }
-    */
     class NextButt implements View.OnClickListener {
         PrepareLevel p;
         Level mylevel;
@@ -141,15 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-    /*public void setLevel(int nlevel) {
-        ImageView imgv = (ImageView) findViewById(R.id.img_level);
-        String img_level = "ic_level" + nlevel;
-        int id = getResources().getIdentifier(img_level, "drawable", getPackageName());
-        imgv.setImageResource(id);
 
-        TextView header = (TextView) findViewById(R.id.level_header);
-        header.setText("Nivel " + nlevel);
-    }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,29 +128,11 @@ public class MainActivity extends AppCompatActivity {
         lf = new LevelFactory(prep.arraytog,
                 prep.getImagesIds(), imgv, textv,MainActivity.this);
 
-        /*char s;
-        NLEVEL = 0;
-        arraytog = new ToggleButton[NTOGGLES];*/
-        /*arraylevels = new Level[MAXLEVELS];
-        lay = findViewById(R.id.linearToggle);
-        for (int i=0;i<NTOGGLES;i++) {
-            s = (char) ('A' + i);
-            createButtons(lay, i, s, arraytog);
-        }
-        createLevels(MAXLEVELS, arraylevels);
-        setLevel(NLEVEL);*/
         Level level = lf.produce(prep.NLEVEL);
 
         Button nextbut = (Button) findViewById(R.id.nextbut);
         nextbut.setOnClickListener(new NextButt(prep, level, lf));
     }
-
-    /*private void createLevels(int maxlevels, Level arraylevels[]) {
-        for(int i = 0;i < maxlevels; i++){
-            arraylevels[i] = LevelFactory.produce(i); {
-            }
-        }
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

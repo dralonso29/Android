@@ -38,6 +38,6 @@
         android:text="@string/summitBut"
         android:id="@+id/nextbut"
         android:layout_gravity="center"/>
-    
+
 
 </android.widget.LinearLayout>

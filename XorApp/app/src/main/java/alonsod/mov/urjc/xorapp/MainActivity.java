@@ -1,8 +1,6 @@
 package alonsod.mov.urjc.xorapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -28,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         char TOGGNAME;
         Boolean[] entradas;
         int[] imagesid;
+        int[] menuids;
 
         PrepareLevel() {
             lay = findViewById(R.id.linearToggle);
@@ -36,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
             arraytog = new ToggleButton[MAXTOGGLES];
             entradas = new Boolean[MAXTOGGLES];
             imagesid = new int[MAXLEVELS];
+            menuids = new int[MAXLEVELS];
         }
 
         public ToggleButton[] createButtons(int ntogg) {
@@ -69,6 +69,23 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < MAXTOGGLES; i++) {
                 arraytog[i].setChecked(false);
             }
+        }
+        public int[] setIdsMenu() {
+            for (int i=0;i<MAXLEVELS;i++) {
+                String menu_level = "menu_level" + i;
+                int id = getResources().getIdentifier(menu_level, "id", getPackageName());
+                menuids[i] = id;
+            }
+            return menuids;
+        }
+        public boolean setLevelMenu(int menuid) {
+            for (int i = 0; i < MAXLEVELS; i++) {
+                if (menuid == menuids[i]) {
+                    prep.NLEVEL = i;
+                    return true;
+                }
+            }
+            return false;
         }
     }
     PrepareLevel prep;
@@ -123,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         prep = new PrepareLevel();
         prep.createButtons(MAXTOGGLES);
+        prep.setIdsMenu();
         ImageView imgv = (ImageView) findViewById(R.id.img_level);
         TextView textv = findViewById(R.id.level_header);
         lf = new LevelFactory(prep.arraytog,
@@ -147,40 +165,23 @@ public class MainActivity extends AppCompatActivity {
         Toast msg;
         Level level;
         Button next = findViewById(R.id.nextbut);
+        int myItem = item.getItemId();
 
-        switch (item.getItemId()) {
-            case R.id.menu_level0:
-                msg = Toast.makeText(MainActivity.this, "Estas en el nivel 0", time);
-                msg.show();
-                prep.NLEVEL = 0;
-                prep.resetButtons();
-                level = lf.produce(prep.NLEVEL);
-                next.setOnClickListener(new NextButt(prep, level, lf));
-                next.setVisibility(View.VISIBLE);
-                return true;
-            case R.id.menu_level1:
-                msg = Toast.makeText(MainActivity.this, "Estas en el nivel 1", time);
-                msg.show();
-                prep.NLEVEL = 1;
-                prep.resetButtons();
-                level = lf.produce(prep.NLEVEL);
-                next.setOnClickListener(new NextButt(prep, level, lf));
-                next.setVisibility(View.VISIBLE);
-                return true;
-            case R.id.menu_level2:
-                msg = Toast.makeText(MainActivity.this, "Estas en el nivel 2", time);
-                msg.show();
-                prep.NLEVEL = 2;
-                prep.resetButtons();
-                level = lf.produce(prep.NLEVEL);
-                next.setOnClickListener(new NextButt(prep, level, lf));
-                next.setVisibility(View.VISIBLE);
-                return true;
+        switch (myItem) {
             case R.id.help:
                 Intent help = new Intent(MainActivity.this, Help.class);
                 startActivity(help);
                 return true;
             default:
+                if (prep.setLevelMenu(myItem)){ //prep.NLEVEL updated on setLevelMenu
+                    msg = Toast.makeText(MainActivity.this, "Estas en el nivel " + prep.NLEVEL, time);
+                    msg.show();
+                    prep.resetButtons();
+                    level = lf.produce(prep.NLEVEL);
+                    next.setOnClickListener(new NextButt(prep, level, lf));
+                    next.setVisibility(View.VISIBLE);
+                    return true;
+                }
                 return super.onOptionsItemSelected(item);
         }
     }

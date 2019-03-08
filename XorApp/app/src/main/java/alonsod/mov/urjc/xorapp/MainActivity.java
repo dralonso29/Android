@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout lay;
         ToggleButton arraytog[];
         char TOGGNAME;
-        Boolean[] entradas;
+        boolean[] entradas;
         int[] imagesid;
         int[] menuids;
 
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             NLEVEL = 0;
             TOGGNAME = 'A';
             arraytog = new ToggleButton[MAXTOGGLES];
-            entradas = new Boolean[MAXTOGGLES];
+            entradas = new boolean[MAXTOGGLES];
             imagesid = new int[MAXLEVELS];
             menuids = new int[MAXLEVELS];
         }
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             return arraytog;
         }
 
-        public Boolean[] getButtonsStatus() {
+        public boolean[] getButtonsStatus() {
             for (int i=0; i<MAXTOGGLES;i++){
                 entradas[i] = arraytog[i].isChecked();
             }
@@ -68,6 +68,12 @@ public class MainActivity extends AppCompatActivity {
         public void resetButtons() {
             for (int i = 0; i < MAXTOGGLES; i++) {
                 arraytog[i].setChecked(false);
+            }
+        }
+        public void setStatusButtons(boolean[] state) {
+
+            for (int i = 0; i < MAXTOGGLES; i++){
+                arraytog[i].setChecked(state[i]);
             }
         }
         public int[] setIdsMenu() {
@@ -118,22 +124,21 @@ public class MainActivity extends AppCompatActivity {
                     p.resetButtons();
                     mylevel = mylf.produce(p.NLEVEL); //update level
                     return;
-                }else{
-                    mymsg = "HAS COMPLETADO TODOS LOS NIVELES!";
-                    msg = Toast.makeText(MainActivity.this, mymsg, time);
-                    msg.show();
-                    next.setVisibility(View.GONE);
-                    return;
                 }
-            }else{
-                mymsg = "Lo siento, el resultado no es correcto";
+                mymsg = "HAS COMPLETADO TODOS LOS NIVELES!";
                 msg = Toast.makeText(MainActivity.this, mymsg, time);
                 msg.show();
+                next.setVisibility(View.GONE);
+                return;
+
             }
+            mymsg = "Lo siento, el resultado no es correcto";
+            msg = Toast.makeText(MainActivity.this, mymsg, time);
+            msg.show();
 
         }
     }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,10 +151,22 @@ public class MainActivity extends AppCompatActivity {
         lf = new LevelFactory(prep.arraytog,
                 prep.getImagesIds(), imgv, textv,MainActivity.this);
 
+        if (savedInstanceState != null){
+            prep.NLEVEL = savedInstanceState.getInt("nlevel");
+            prep.entradas = savedInstanceState.getBooleanArray("stateButtons");
+            prep.setStatusButtons(prep.entradas);
+        }
+
         Level level = lf.produce(prep.NLEVEL);
 
         Button nextbut = (Button) findViewById(R.id.nextbut);
         nextbut.setOnClickListener(new NextButt(prep, level, lf));
+    }
+
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putBooleanArray("stateButtons", prep.getButtonsStatus());
+        state.putInt("nlevel", prep.NLEVEL);
     }
 
     @Override

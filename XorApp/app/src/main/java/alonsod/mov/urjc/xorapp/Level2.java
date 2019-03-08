@@ -41,7 +41,7 @@ public class Level2 extends Level {
             toggle[i].setVisibility(VISIBLE);
         }
     }
-    public boolean SalidaBuena(Boolean entradas[]) {
+    public boolean SalidaBuena(boolean entradas[]) {
         Log.d("SalidaBuena","Salida buena");
         Log.d("SalidaBuena","A --> " + entradas[0]);
         Log.d("SalidaBuena","B --> " + entradas[1]);
@@ -49,7 +49,7 @@ public class Level2 extends Level {
         Log.d("SalidaBuena", ""+(((!entradas[0]) && entradas[1]) && ((!entradas[2]) || entradas[1]))+"\n");
         return ((!entradas[0]) && entradas[1]) && ((!entradas[2]) || entradas[1]);
     }
-    public boolean SalidaMala(Boolean entradas[]) {
+    public boolean SalidaMala(boolean entradas[]) {
         Log.d("SalidaMala","Salida mala");
         Log.d("SalidaMala","A --> " + entradas[0]);
         Log.d("SalidaMala","B --> " + entradas[1]);

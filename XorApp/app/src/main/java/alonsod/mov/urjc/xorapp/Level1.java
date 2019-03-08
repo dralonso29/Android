@@ -41,11 +41,11 @@ public class Level1 extends Level {
             toggle[i].setVisibility(VISIBLE);
         }
     }
-    public boolean SalidaBuena(Boolean entradas[]) {
+    public boolean SalidaBuena(boolean entradas[]) {
         Log.d("SalidaBuena","nivel1");
         return (entradas[0] && entradas[1]) || (entradas[2] || entradas[3]);
     }
-    public boolean SalidaMala(Boolean entradas[]) {
+    public boolean SalidaMala(boolean entradas[]) {
         return !((entradas[0] && entradas[1]) && (entradas[2] || entradas[3]));
     }
 }

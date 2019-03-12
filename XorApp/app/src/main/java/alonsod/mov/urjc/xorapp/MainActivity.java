@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             menuids = new int[MAXLEVELS];
         }
 
-        public ToggleButton[] createButtons(int ntogg) {
+        private ToggleButton[] createButtons(int ntogg) {
             for (int i=0;i<ntogg;i++) {
                 ToggleButton toggle = new ToggleButton(MainActivity.this);
                 toggle.setTextOff(Character.toString((char) (TOGGNAME+i)) + " = 0");
@@ -50,14 +50,14 @@ public class MainActivity extends AppCompatActivity {
             return arraytog;
         }
 
-        public boolean[] getButtonsStatus() {
+        private boolean[] getButtonsStatus() {
             for (int i=0; i<MAXTOGGLES;i++){
                 entradas[i] = arraytog[i].isChecked();
             }
             return entradas;
         }
 
-        public int[] getImagesIds() {
+        private int[] getImagesIds() {
             for (int i=0;i<MAXLEVELS;i++) {
                 String img_level = "ic_level" + i;
                 int id = getResources().getIdentifier(img_level, "drawable", getPackageName());
@@ -65,18 +65,18 @@ public class MainActivity extends AppCompatActivity {
             }
             return imagesid;
         }
-        public void resetButtons() {
+        private void resetButtons() {
             for (int i = 0; i < MAXTOGGLES; i++) {
                 arraytog[i].setChecked(false);
             }
         }
-        public void setStatusButtons(boolean[] state) {
+        private void setStatusButtons(boolean[] state) {
 
             for (int i = 0; i < MAXTOGGLES; i++){
                 arraytog[i].setChecked(state[i]);
             }
         }
-        public int[] setIdsMenu() {
+        private int[] setIdsMenu() {
             for (int i=0;i<MAXLEVELS;i++) {
                 String menu_level = "menu_level" + i;
                 int id = getResources().getIdentifier(menu_level, "id", getPackageName());
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return menuids;
         }
-        public boolean setLevelMenu(int menuid) {
+        private boolean setLevelMenu(int menuid) {
             for (int i = 0; i < MAXLEVELS; i++) {
                 if (menuid == menuids[i]) {
                     prep.NLEVEL = i;
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

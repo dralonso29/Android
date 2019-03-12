@@ -10,10 +10,10 @@ public class LevelFactory {
     static final int MAXLEVELS = 3;
     static final int MAXTOGGLES = 4;
     private static ToggleButton[] togg;
-    private static Context cont;
+    private Context cont;
     private static int[] id;
-    private static ImageView img;
-    private static TextView textheader;
+    private ImageView img;
+    private TextView textheader;
 
     LevelFactory(ToggleButton[] arraytog, int[] imagesid, ImageView imgv, TextView textv, Context maincontext){
         togg = arraytog;
@@ -23,7 +23,7 @@ public class LevelFactory {
         textheader = textv;
     }
 
-    public static Level produce(int nlevel) {
+    public Level produce(int nlevel) {
         Level mylevel;
         switch (nlevel){
             case 0:

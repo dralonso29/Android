@@ -14,7 +14,11 @@
         android:text="@string/help"
         android:typeface="monospace"
         app:layout_constraintStart_toStartOf="@+id/img_help"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="18sp"/>
 
     <ImageView
         android:id="@+id/img_help"
@@ -24,7 +28,8 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:gravity="center"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"/>
 
 
 </android.widget.LinearLayout>

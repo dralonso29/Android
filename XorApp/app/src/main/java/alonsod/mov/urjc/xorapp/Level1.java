@@ -36,11 +36,7 @@ public class Level1 extends Level {
             return;
         }
     }
-    public void setVisibleAll(ToggleButton toggle[]){
-        for (int i=0;i<MAXTOGGLES;i++){
-            toggle[i].setVisibility(VISIBLE);
-        }
-    }
+
     public boolean SalidaBuena(boolean entradas[]) {
         Log.d("SalidaBuena","nivel1");
         return (entradas[0] && entradas[1]) || (entradas[2] || entradas[3]);

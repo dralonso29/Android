@@ -13,6 +13,7 @@ import static android.view.View.VISIBLE;
 public class Level0 extends Level {
     int level;
     int visiblebuttons;
+
     public Level0(int nlevel) {
         level = nlevel;
         visiblebuttons = 4;
@@ -37,11 +38,7 @@ public class Level0 extends Level {
             return;
         }
     }
-    public void setVisibleAll(ToggleButton toggle[]){
-        for (int i=0;i<MAXTOGGLES;i++){
-            toggle[i].setVisibility(VISIBLE);
-        }
-    }
+
     public boolean SalidaBuena(boolean entradas[]) {
         Log.d("SalidaBuena","nivel0");
         return !(entradas[0] && entradas[1]);

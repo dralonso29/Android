@@ -93,6 +93,13 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         }
+        private ImageView getImgViewLevel(){
+            return findViewById(R.id.img_level);
+        }
+
+        public TextView getTextViewHeader() {
+            return findViewById(R.id.level_header);
+        }
     }
     PrepareLevel prep;
     LevelFactory lf;
@@ -101,11 +108,15 @@ public class MainActivity extends AppCompatActivity {
         PrepareLevel p;
         Level mylevel;
         LevelFactory mylf;
+        ImageView imgv;
+        TextView textv;
 
-        NextButt(PrepareLevel prep, Level level, LevelFactory lf) {
+        NextButt(PrepareLevel prep, Level level, LevelFactory lf, ImageView imgv, TextView textv) {
             p = prep;
             mylevel = level;
             mylf = lf;
+            this.imgv = imgv;
+            this.textv = textv;
         }
 
         @Override
@@ -123,6 +134,10 @@ public class MainActivity extends AppCompatActivity {
                     msg.show();
                     p.resetButtons();
                     mylevel = mylf.produce(p.NLEVEL); //update level
+                    mylevel.setVisibleAll(prep.arraytog);
+                    mylevel.setButtons(prep.arraytog);
+                    mylevel.setImage(prep.getImagesIds()[prep.NLEVEL], imgv);
+                    mylevel.setTitle(textv);
                     return;
                 }
                 mymsg = "HAS COMPLETADO TODOS LOS NIVELES!";
@@ -146,10 +161,9 @@ public class MainActivity extends AppCompatActivity {
         prep = new PrepareLevel();
         prep.createButtons(MAXTOGGLES);
         prep.setIdsMenu();
-        ImageView imgv = (ImageView) findViewById(R.id.img_level);
-        TextView textv = findViewById(R.id.level_header);
-        lf = new LevelFactory(prep.arraytog,
-                prep.getImagesIds(), imgv, textv,MainActivity.this);
+        ImageView imgv = prep.getImgViewLevel();
+        TextView textv = prep.getTextViewHeader();
+        lf = new LevelFactory();
 
         if (savedInstanceState != null){
             prep.NLEVEL = savedInstanceState.getInt("nlevel");
@@ -158,9 +172,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Level level = lf.produce(prep.NLEVEL);
+        level.setVisibleAll(prep.arraytog);
+        level.setButtons(prep.arraytog);
+        level.setImage(prep.getImagesIds()[prep.NLEVEL], imgv);
+        level.setTitle(textv);
 
         Button nextbut = (Button) findViewById(R.id.nextbut);
-        nextbut.setOnClickListener(new NextButt(prep, level, lf));
+        nextbut.setOnClickListener(new NextButt(prep, level, lf, imgv, textv));
     }
 
     public void onSaveInstanceState(Bundle state) {
@@ -195,7 +213,11 @@ public class MainActivity extends AppCompatActivity {
                     msg.show();
                     prep.resetButtons();
                     level = lf.produce(prep.NLEVEL);
-                    next.setOnClickListener(new NextButt(prep, level, lf));
+                    level.setVisibleAll(prep.arraytog);
+                    level.setButtons(prep.arraytog);
+                    level.setImage(prep.getImagesIds()[prep.NLEVEL], prep.getImgViewLevel());
+                    level.setTitle(prep.getTextViewHeader());
+                    next.setOnClickListener(new NextButt(prep, level, lf, prep.getImgViewLevel(), prep.getTextViewHeader()));
                     next.setVisibility(View.VISIBLE);
                     return true;
                 }

@@ -25,6 +25,7 @@ public class Level2 extends Level {
     public void setTitle(TextView textheader) {
         textheader.setText("Nivel " + level);
     }
+
     public void setButtons(ToggleButton toggle[]) {
         if (visiblebuttons >= MAXTOGGLES) {
             //devolver error
@@ -36,11 +37,7 @@ public class Level2 extends Level {
             return;
         }
     }
-    public void setVisibleAll(ToggleButton toggle[]){
-        for (int i=0;i<MAXTOGGLES;i++){
-            toggle[i].setVisibility(VISIBLE);
-        }
-    }
+
     public boolean SalidaBuena(boolean entradas[]) {
         Log.d("SalidaBuena","Salida buena");
         Log.d("SalidaBuena","A --> " + entradas[0]);

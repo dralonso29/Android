@@ -29,30 +29,22 @@ public class LevelFactory {
             case 0:
                 Log.d("SalidaBuena","LF: nivel0");
                 mylevel = new Level0(nlevel);
-                mylevel.setVisibleAll(togg);
-                mylevel.setButtons(togg);
-                mylevel.setImage(id[nlevel], img);
-                mylevel.setTitle(textheader);
-                return mylevel;
+                break;
             case 1:
                 Log.d("SalidaBuena","LF: nivel1");
                 mylevel = new Level1(nlevel);
-                mylevel.setVisibleAll(togg);
-                mylevel.setButtons(togg);
-                mylevel.setImage(id[nlevel], img);
-                mylevel.setTitle(textheader);
-                return mylevel;
+                break;
             case 2:
                 Log.d("SalidaBuena","LF: nivel2");
                 mylevel = new Level2(nlevel);
-                mylevel.setVisibleAll(togg);
-                mylevel.setButtons(togg);
-                mylevel.setImage(id[nlevel], img);
-                mylevel.setTitle(textheader);
-                return mylevel;
+                break;
             default:
                 mylevel = new Level0(nlevel);
-                return mylevel;
         }
+        mylevel.setVisibleAll(togg);
+        mylevel.setButtons(togg);
+        mylevel.setImage(id[nlevel], img);
+        mylevel.setTitle(textheader);
+        return mylevel;
     }
 }

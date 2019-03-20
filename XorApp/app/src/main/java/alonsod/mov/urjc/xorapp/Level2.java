@@ -10,32 +10,11 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public class Level2 extends Level {
-    int level;
-    int visiblebuttons;
-    public Level2(int nlevel) {
-        level = nlevel;
-        visiblebuttons = 3;
-    }
+    final static int level = 2;
+    final static int visiblebuttons = 3;
 
-    public String getLevelName() { return "nivel " + level;}
-
-    public void setImage(int id, ImageView img) {
-        img.setImageResource(id);
-    }
-    public void setTitle(TextView textheader) {
-        textheader.setText("Nivel " + level);
-    }
-
-    public void setButtons(ToggleButton toggle[]) {
-        if (visiblebuttons >= MAXTOGGLES) {
-            //devolver error
-            return;
-        }else{
-            for (int i = visiblebuttons; i < MAXTOGGLES;i++) {
-                toggle[i].setVisibility(GONE);
-            }
-            return;
-        }
+    public Level2(int id, ImageView img, ToggleButton[] togg, TextView textheader) {
+        super(id, img, level, visiblebuttons, togg, textheader);
     }
 
     public boolean SalidaBuena(boolean entradas[]) {

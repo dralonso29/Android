@@ -134,10 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     msg.show();
                     p.resetButtons();
                     mylevel = mylf.produce(p.NLEVEL); //update level
-                    mylevel.setVisibleAll(prep.arraytog);
-                    mylevel.setButtons(prep.arraytog);
-                    mylevel.setImage(prep.getImagesIds()[prep.NLEVEL], imgv);
-                    mylevel.setTitle(textv);
+                    mylevel.loadLevel();
                     return;
                 }
                 mymsg = "HAS COMPLETADO TODOS LOS NIVELES!";
@@ -163,7 +160,8 @@ public class MainActivity extends AppCompatActivity {
         prep.setIdsMenu();
         ImageView imgv = prep.getImgViewLevel();
         TextView textv = prep.getTextViewHeader();
-        lf = new LevelFactory();
+        lf = new LevelFactory(prep.arraytog,
+                prep.getImagesIds(), imgv, textv);
 
         if (savedInstanceState != null){
             prep.NLEVEL = savedInstanceState.getInt("nlevel");
@@ -172,10 +170,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Level level = lf.produce(prep.NLEVEL);
-        level.setVisibleAll(prep.arraytog);
-        level.setButtons(prep.arraytog);
-        level.setImage(prep.getImagesIds()[prep.NLEVEL], imgv);
-        level.setTitle(textv);
+        level.loadLevel();
 
         Button nextbut = (Button) findViewById(R.id.nextbut);
         nextbut.setOnClickListener(new NextButt(prep, level, lf, imgv, textv));
@@ -213,10 +208,7 @@ public class MainActivity extends AppCompatActivity {
                     msg.show();
                     prep.resetButtons();
                     level = lf.produce(prep.NLEVEL);
-                    level.setVisibleAll(prep.arraytog);
-                    level.setButtons(prep.arraytog);
-                    level.setImage(prep.getImagesIds()[prep.NLEVEL], prep.getImgViewLevel());
-                    level.setTitle(prep.getTextViewHeader());
+                    level.loadLevel();
                     next.setOnClickListener(new NextButt(prep, level, lf, prep.getImgViewLevel(), prep.getTextViewHeader()));
                     next.setVisibility(View.VISIBLE);
                     return true;

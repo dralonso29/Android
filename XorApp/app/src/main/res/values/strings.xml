@@ -13,4 +13,6 @@
     <string name="levels">Levels</string>
     <string name="exit">Salir</string>
     <string name="help_label">Help</string>
+    <string name="playButt">Play</string>
+
 </resources>

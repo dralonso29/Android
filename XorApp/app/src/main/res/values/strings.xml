@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">XorApp</string>
     <string name="summitBut">Avanzar Nivel</string>
-    <string name="help">OBJETIVO DEL JUEGO:
-        pulsar la combinación adecuada de entradas (A, B, C, D, etc) para tener en la cara sonriente amarilla un 1 y en la triste roja un 0.
+    <string name="help">Pulsar la combinación adecuada de entradas (A, B, C, D, etc) para tener en la cara sonriente amarilla un 1 y en la triste roja un 0.
         Deberás meter en cada entrada un 0 o un 1, pulsando los botones que tienes a tu disposición.
         Si el boton tiene una luz de color roja, indica que en esa entrada hay un 1. Si esta apagada, hay un 0. Inicialmente en cada nivel,
         todas las entradas están a cero.\n

@@ -7,6 +7,14 @@
     android:orientation="vertical">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="30sp"
+        android:text="Objetivo del juego"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
         android:id="@+id/help_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,10 +23,19 @@
         android:typeface="monospace"
         app:layout_constraintStart_toStartOf="@+id/img_help"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textSize="18sp"/>
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="30sp"
+        android:text="Logica de las puertas"
+        android:layout_marginTop="30dp"/>
 
     <ImageView
         android:id="@+id/img_help"

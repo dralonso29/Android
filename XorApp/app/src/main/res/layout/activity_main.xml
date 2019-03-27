@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="30sp"
-        android:layout_marginTop="20dp"/>
+        android:textSize="70sp"
+        android:layout_marginTop="30dp"/>
 
     <LinearLayout
         android:id="@+id/linearToggle"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="horizontal"
-        android:layout_marginTop="30dp">
+        android:layout_margin="40dp">
     </LinearLayout>
 
     <ImageView
@@ -32,15 +32,17 @@
         android:scaleType="fitXY"
         android:layout_margin="@android:dimen/app_icon_size"
         android:layout_gravity="center"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="40dp"/>
         <!--android:src="@drawable/ic_level1"-->
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/summitBut"
+        android:textSize="30sp"
         android:id="@+id/nextbut"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"/>
 
 
 </android.widget.LinearLayout>

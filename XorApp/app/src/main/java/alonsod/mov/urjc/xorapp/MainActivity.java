@@ -3,6 +3,7 @@ package alonsod.mov.urjc.xorapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 toggle.setTextOff(Character.toString((char) (TOGGNAME+i)) + " = 0");
                 toggle.setTextOn(Character.toString((char) (TOGGNAME+i)) + " = 1");
                 toggle.setChecked(false);
+                toggle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
                 lay.addView(toggle);
                 arraytog[i] = toggle;
             }
@@ -103,11 +105,10 @@ public class MainActivity extends AppCompatActivity {
             return findViewById(R.id.level_header);
         }
 
-        private boolean[] iniatlizeMenuVisibility(){
+        private void iniatlizeMenuVisibility(){
             for (int i = 0; i < MAXLEVELS; i++){
                 passed[i] = false;
             }
-            return passed;
         }
     }
     PrepareLevel prep;

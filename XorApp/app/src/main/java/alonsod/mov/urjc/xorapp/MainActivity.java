@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
         prep = new PrepareLevel();
         prep.createButtons(MAXTOGGLES);
         prep.setIdsMenu();
+        prep.iniatlizeMenuVisibility();
         ImageView imgv = prep.getImgViewLevel();
         TextView textv = prep.getTextViewHeader();
         lf = new LevelFactory(prep.arraytog,

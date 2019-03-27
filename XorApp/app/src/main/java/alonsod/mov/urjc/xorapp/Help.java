@@ -11,7 +11,7 @@ public class Help extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
         ImageView imghelp = findViewById(R.id.img_help);
-        String img_help = "ic_help";
+        String img_help = "ic_help_logic";
         int id = getResources().getIdentifier(img_help, "drawable", getPackageName());
         imghelp.setImageResource(id);
     }

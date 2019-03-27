@@ -26,4 +26,9 @@ public class WelcomeActivity extends AppCompatActivity {
         Intent play = new Intent(WelcomeActivity.this, MainActivity.class);
         startActivity(play);
     }
+
+    public void showhelp(View v) {
+        Intent help = new Intent(WelcomeActivity.this, Help.class);
+        startActivity(help);
+    }
 }

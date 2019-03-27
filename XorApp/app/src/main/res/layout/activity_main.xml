@@ -42,7 +42,7 @@
         android:textSize="30sp"
         android:id="@+id/nextbut"
         android:layout_gravity="center"
-        android:layout_marginTop="40dp"/>
+        android:layout_margin="40dp"/>
 
 
 </android.widget.LinearLayout>

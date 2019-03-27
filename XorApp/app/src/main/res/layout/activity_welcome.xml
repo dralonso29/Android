@@ -16,13 +16,28 @@
         android:layout_gravity="center"
         android:layout_marginTop="30dp"/>
 
-    <Button
-        android:layout_width="match_parent"
+    <ImageButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:text="@string/playButt"
         android:onClick="startlevel"
+        android:layout_gravity="center"
         android:layout_centerInParent="true"
-        android:id="@+id/play" />
+        android:id="@+id/play"
+        android:src="@drawable/ic_play"
+        android:backgroundTint="@android:color/transparent"
+        android:layout_margin="20sp"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:onClick="showhelp"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:id="@+id/welcome_help"
+        android:src="@drawable/ic_help"
+        android:backgroundTint="@android:color/transparent"
+        android:layout_margin="20sp"/>
 
 </android.widget.LinearLayout>

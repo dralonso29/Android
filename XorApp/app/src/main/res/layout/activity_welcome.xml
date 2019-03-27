@@ -7,8 +7,17 @@
     android:orientation="vertical"
     tools:context=".WelcomeActivity">
 
-    <Button
+    <ImageView
+        android:id="@+id/img_app"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:layout_margin="@android:dimen/app_icon_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"/>
+
+    <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:text="@string/playButt"

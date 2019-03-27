@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/menu">
 
     <item
         android:id="@+id/menu_level0"
         android:title="Nivel 0" />
     <item
         android:id="@+id/menu_level1"
-        android:title="Nivel 1" />
+        android:title="Nivel 1"
+        android:visible="false"/>
     <item
         android:id="@+id/menu_level2"
-        android:title="Nivel 2" />
+        android:title="Nivel 2"
+        android:visible="false"/>
 
     <item
         android:id="@+id/help"

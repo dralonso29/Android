@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         boolean[] entradas;
         int[] imagesid;
         int[] menuids;
+        boolean[] passed;
 
         PrepareLevel() {
             lay = findViewById(R.id.linearToggle);
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             entradas = new boolean[MAXTOGGLES];
             imagesid = new int[MAXLEVELS];
             menuids = new int[MAXLEVELS];
+            passed = new boolean[MAXLEVELS];
         }
 
         private ToggleButton[] createButtons(int ntogg) {
@@ -100,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
         public TextView getTextViewHeader() {
             return findViewById(R.id.level_header);
         }
+
+        private boolean[] iniatlizeMenuVisibility(){
+            for (int i = 0; i < MAXLEVELS; i++){
+                passed[i] = false;
+            }
+            return passed;
+        }
     }
     PrepareLevel prep;
     LevelFactory lf;
@@ -129,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
             if(mylevel.SalidaBuena(p.getButtonsStatus()) && !mylevel.SalidaMala(p.getButtonsStatus())){
                 p.NLEVEL++;
                 if (p.NLEVEL < MAXLEVELS) {
+                    p.passed[p.NLEVEL] = true;
                     mymsg = "Enhorabuena, " + mylevel.getLevelName() + " completado!";
                     msg = Toast.makeText(MainActivity.this, mymsg, time);
                     msg.show();
@@ -147,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
             mymsg = "Lo siento, el resultado no es correcto";
             msg = Toast.makeText(MainActivity.this, mymsg, time);
             msg.show();
-
         }
     }
 
@@ -196,7 +205,6 @@ public class MainActivity extends AppCompatActivity {
         Level level;
         Button next = findViewById(R.id.nextbut);
         int myItem = item.getItemId();
-
         switch (myItem) {
             case R.id.help:
                 Intent help = new Intent(MainActivity.this, Help.class);
@@ -216,4 +224,15 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        for (int i = 1; i<MAXLEVELS;i++){
+            if (prep.passed[i]){ //if we have passed level, can show level on menu
+                menu.findItem(prep.menuids[i]).setVisible(true);
+            }
+        }
+        return true;
+    }
+
 }

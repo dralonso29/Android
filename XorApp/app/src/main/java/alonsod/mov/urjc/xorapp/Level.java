@@ -1,5 +1,7 @@
 package alonsod.mov.urjc.xorapp;
 
+import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -50,6 +52,9 @@ public abstract class Level {
             return;
         }
     }
+    /*public void setVisibleMenuButton(int i){
+        menuv.findItem(R.id.menu_level1).setVisible(true);
+    }*/
     public void loadLevel() {
         setVisibleAll();
         setButtons();

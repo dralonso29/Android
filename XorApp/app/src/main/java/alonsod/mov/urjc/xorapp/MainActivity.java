@@ -180,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
                     p.resetButtons();
                     mylevel = mylf.produce(p.NLEVEL); //update level
                     mylevel.loadLevel();
+                    tc.setInitial(tc.current);
+                    Log.d("MainActivity: Date: initialTime (Actualizado)", tc.initial.toString());
                     return;
                 }
                 mymsg = "HAS COMPLETADO TODOS LOS NIVELES!";
@@ -254,6 +256,8 @@ public class MainActivity extends AppCompatActivity {
                     prep.resetButtons();
                     level = lf.produce(prep.NLEVEL);
                     level.loadLevel();
+                    tc.setInitial(Calendar.getInstance().getTime());
+                    Log.d("MainActivity: Date: initialTime (Menu)", tc.initial.toString());
                     next.setOnClickListener(new NextButt(prep, level, lf, prep.getImgViewLevel(), prep.getTextViewHeader()));
                     next.setVisibility(View.VISIBLE);
                     return true;

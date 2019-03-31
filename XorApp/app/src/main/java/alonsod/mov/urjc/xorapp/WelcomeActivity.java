@@ -3,8 +3,10 @@ package alonsod.mov.urjc.xorapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -13,6 +15,24 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         setImage();
+        String usrname = getUsrName(); //mirar si usrname no es null
+        //Log.d("WelcomeActivity", usrname);
+        putWelcomeMsg(usrname);
+    }
+
+    private void putWelcomeMsg(String usrname) {
+        TextView txt = findViewById(R.id.usr_welcome);
+        txt.setText("Loggeado como "+usrname);
+    }
+
+    private String getUsrName() {
+
+        Intent intent = getIntent();
+        Bundle info = intent.getExtras();
+        if (info != null) {
+            return info.getString("username");
+        }
+        return "None";
     }
 
     private void setImage() {

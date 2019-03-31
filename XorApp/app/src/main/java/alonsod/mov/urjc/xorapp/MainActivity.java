@@ -1,8 +1,10 @@
 package alonsod.mov.urjc.xorapp;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import static alonsod.mov.urjc.xorapp.LevelFactory.MAXLEVELS;
 import static alonsod.mov.urjc.xorapp.LevelFactory.MAXTOGGLES;
@@ -29,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         int[] imagesid;
         int[] menuids;
         boolean[] passed;
+        Resources rso;
 
         PrepareLevel() {
             lay = findViewById(R.id.linearToggle);
@@ -39,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
             imagesid = new int[MAXLEVELS];
             menuids = new int[MAXLEVELS];
             passed = new boolean[MAXLEVELS];
+            rso = getResources();
         }
 
         private ToggleButton[] createButtons(int ntogg) {
@@ -64,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         private int[] getImagesIds() {
             for (int i=0;i<MAXLEVELS;i++) {
                 String img_level = "ic_level" + i;
-                int id = getResources().getIdentifier(img_level, "drawable", getPackageName());
+                int id = rso.getIdentifier(img_level, "drawable", getPackageName());
                 imagesid[i] = id;
             }
             return imagesid;
@@ -81,9 +88,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         private int[] setIdsMenu() {
+
             for (int i=0;i<MAXLEVELS;i++) {
                 String menu_level = "menu_level" + i;
-                int id = getResources().getIdentifier(menu_level, "id", getPackageName());
+                int id = rso.getIdentifier(menu_level, "id", getPackageName());
                 menuids[i] = id;
             }
             return menuids;
@@ -111,8 +119,31 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    public class TimeControler{
+        Date initial;
+        Date current;
+
+        private void setInitial(Date d) {
+            initial = d;
+        }
+        private void setCurrent(Date d) {
+            current = d;
+        }
+        private Date getInitial() {
+            return initial;
+        }
+        private Date getCurrent() {
+            return current;
+        }
+
+        public long getDiffTime() {
+            return current.getTime() - initial.getTime();
+        }
+    }
     PrepareLevel prep;
     LevelFactory lf;
+    TimeControler tc;
 
     class NextButt implements View.OnClickListener {
         PrepareLevel p;
@@ -137,6 +168,9 @@ public class MainActivity extends AppCompatActivity {
             Button next = findViewById(R.id.nextbut);
             String mymsg;
             if(mylevel.SalidaBuena(p.getButtonsStatus()) && !mylevel.SalidaMala(p.getButtonsStatus())){
+                tc.setCurrent(Calendar.getInstance().getTime());
+                Log.d("MainActivity: Date: currentTime", tc.current.toString());
+                Log.d("MainActivity: Date: diff", tc.getDiffTime()+"");
                 p.NLEVEL++;
                 if (p.NLEVEL < MAXLEVELS) {
                     p.passed[p.NLEVEL] = true;
@@ -153,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
                 msg.show();
                 next.setVisibility(View.GONE);
                 return;
-
             }
             mymsg = "Lo siento, el resultado no es correcto";
             msg = Toast.makeText(MainActivity.this, mymsg, time);
@@ -165,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        tc = new TimeControler();
         prep = new PrepareLevel();
         prep.createButtons(MAXTOGGLES);
         prep.setIdsMenu();
@@ -182,8 +216,9 @@ public class MainActivity extends AppCompatActivity {
 
         Level level = lf.produce(prep.NLEVEL);
         level.loadLevel();
-
-        Button nextbut = (Button) findViewById(R.id.nextbut);
+        tc.setInitial(Calendar.getInstance().getTime());
+        Log.d("MainActivity: Date: initialTime", tc.initial.toString());
+        Button nextbut = findViewById(R.id.nextbut);
         nextbut.setOnClickListener(new NextButt(prep, level, lf, imgv, textv));
     }
 

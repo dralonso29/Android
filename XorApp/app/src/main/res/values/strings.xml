@@ -13,5 +13,6 @@
     <string name="exit">Salir</string>
     <string name="help_label">Help</string>
     <string name="playButt">Play</string>
+    <string name="escribir_username">Escribe un nombre de usuario</string>
 
 </resources>

@@ -13,14 +13,13 @@
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:layout_margin="@android:dimen/app_icon_size"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"/>
+        android:layout_gravity="center" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/usr_welcome"
-        android:textSize="40sp"
+        android:textSize="35sp"
         android:layout_gravity="center"/>
 
     <ImageButton
@@ -33,7 +32,7 @@
         android:id="@+id/play"
         android:src="@drawable/ic_play"
         android:backgroundTint="@android:color/transparent"
-        android:layout_margin="20sp"/>
+        android:layout_margin="10sp" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -45,6 +44,17 @@
         android:id="@+id/welcome_help"
         android:src="@drawable/ic_help"
         android:backgroundTint="@android:color/transparent"
-        android:layout_margin="20sp"/>
+        android:layout_margin="10sp"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:id="@+id/welcome_scores"
+        android:src="@drawable/ic_scores"
+        android:backgroundTint="@android:color/transparent" />
+    <!--android:onClick="showscores"-->
 
 </android.widget.LinearLayout>

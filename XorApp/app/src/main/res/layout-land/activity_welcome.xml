@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".WelcomeActivity">
+
+    <ImageView
+        android:id="@+id/img_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:layout_margin="@android:dimen/app_icon_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/usr_welcome"
+        android:textSize="40sp"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:onClick="startlevel"
+            android:layout_gravity="left"
+            android:layout_centerInParent="true"
+            android:id="@+id/play"
+            android:src="@drawable/ic_play"
+            android:backgroundTint="@android:color/transparent"
+            android:layout_margin="20sp"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:onClick="showhelp"
+            android:layout_gravity="right"
+            android:layout_centerInParent="true"
+            android:id="@+id/welcome_help"
+            android:src="@drawable/ic_help"
+            android:backgroundTint="@android:color/transparent"
+            android:layout_margin="20sp"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="right"
+            android:layout_centerInParent="true"
+            android:id="@+id/welcome_scores"
+            android:src="@drawable/ic_scores"
+            android:backgroundTint="@android:color/transparent"
+            android:layout_margin="20sp"/>
+        <!--android:onClick="showscores"-->
+    </LinearLayout>
+
+
+
+</android.widget.LinearLayout>

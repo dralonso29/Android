@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null){
             prep.NLEVEL = savedInstanceState.getInt("nlevel");
             prep.entradas = savedInstanceState.getBooleanArray("stateButtons");
+            prep.passed = savedInstanceState.getBooleanArray("passed");
             prep.setStatusButtons(prep.entradas);
         }
 
@@ -228,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(state);
         state.putBooleanArray("stateButtons", prep.getButtonsStatus());
         state.putInt("nlevel", prep.NLEVEL);
+        state.putBooleanArray("passed", prep.passed);
     }
 
     @Override

@@ -367,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
             String line;
             while((line = br.readLine()) != null){
                 Log.d("ActivityMain", "Leemos -->"+line);
-                arraylines.add(line+"\n");
+                arraylines.add(line+"\n"); // este salto de linea es de vital importancia
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

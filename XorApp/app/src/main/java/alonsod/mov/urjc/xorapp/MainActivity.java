@@ -3,6 +3,7 @@ package alonsod.mov.urjc.xorapp;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
@@ -17,13 +18,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static alonsod.mov.urjc.xorapp.LevelFactory.MAXLEVELS;
 import static alonsod.mov.urjc.xorapp.LevelFactory.MAXTOGGLES;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int MAXLINES = 1024;
 
     public class PrepareLevel {
         int NLEVEL;
@@ -35,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         int[] menuids;
         boolean[] passed;
         Resources rso;
+        String usrname;
 
         PrepareLevel() {
             lay = findViewById(R.id.linearToggle);
@@ -123,7 +138,16 @@ public class MainActivity extends AppCompatActivity {
     public class TimeControler{
         Date initial;
         Date current;
+        int[] times;
+        TimeControler(){
+            times = new int[MAXLEVELS];
+        }
 
+        private void initTimes(){
+            for (int i = 0; i<MAXLEVELS;i++){
+                times[i] = 0;
+            }
+        }
         private void setInitial(Date d) {
             initial = d;
         }
@@ -144,6 +168,8 @@ public class MainActivity extends AppCompatActivity {
     PrepareLevel prep;
     LevelFactory lf;
     TimeControler tc;
+    boolean mExternalStorageAvaliable = false;
+    boolean mExternalStorageWriteable = false;
 
     class NextButt implements View.OnClickListener {
         PrepareLevel p;
@@ -171,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
                 tc.setCurrent(Calendar.getInstance().getTime());
                 Log.d("MainActivity: Date: currentTime", tc.current.toString());
                 Log.d("MainActivity: Date: diff", tc.getDiffTime()+"");
+                tc.times[p.NLEVEL] = (int) tc.getDiffTime();
+                writeFileScores();
                 p.NLEVEL++;
                 if (p.NLEVEL < MAXLEVELS) {
                     p.passed[p.NLEVEL] = true;
@@ -205,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
         prep.createButtons(MAXTOGGLES);
         prep.setIdsMenu();
         prep.iniatlizeMenuVisibility();
+        tc.initTimes();
         ImageView imgv = prep.getImgViewLevel();
         TextView textv = prep.getTextViewHeader();
         lf = new LevelFactory(prep.arraytog,
@@ -217,12 +246,158 @@ public class MainActivity extends AppCompatActivity {
             prep.setStatusButtons(prep.entradas);
         }
 
+        prep.usrname = getUsrName();
+        Log.d("ActivityMain", prep.usrname);
+        writeFileScores();
+
         Level level = lf.produce(prep.NLEVEL);
         level.loadLevel();
         tc.setInitial(Calendar.getInstance().getTime());
         Log.d("MainActivity: Date: initialTime", tc.initial.toString());
         Button nextbut = findViewById(R.id.nextbut);
         nextbut.setOnClickListener(new NextButt(prep, level, lf, imgv, textv));
+    }
+
+    private String getUsrName() {
+        Intent intent = getIntent();
+        Bundle info = intent.getExtras();
+        if (info != null) {
+            return info.getString("username");
+        }
+        return "None";
+    }
+
+    private void writing(String str, File scores, boolean append){
+        Log.d("ActivityMain", "append :"+append);
+        try {
+            BufferedOutputStream output = new
+                    BufferedOutputStream(new FileOutputStream(scores, append));
+            DataOutputStream data = new DataOutputStream(output);
+            data.writeBytes(str);
+            data.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeFileScores() {
+        checkExternalStorage();
+        if(mExternalStorageWriteable) {
+            File route = getExternalFilesDir("XorApp");
+            Log.d("MainActivity ", "LA RUTA: "+route);
+            Log.d("MainActivity","Storage Avaliable: "+mExternalStorageAvaliable);
+            Log.d("MainActivity","Storage Writeable: "+mExternalStorageWriteable);
+            File scores = new File(route, "scores.txt");
+            List<String> arraylines = readFile(scores);
+            boolean append = false;
+            String[] lines = new String[arraylines.size()];
+            arraylines.toArray(lines);
+            String[] line;
+            String usr;
+            String t0, t1, t2;
+            boolean found = false;
+
+            if (arraylines.isEmpty()) { // si esta vacio el fichero, escribimos directamente
+                String str = make_string();
+                writing(str, scores, append);
+                return;
+            }
+
+            for (int j = 0; j < lines.length; j++){
+                Log.d("ActivityMain", "lines["+j+"] = "+ lines[j]);
+                line = split_by(lines[j], "\n");
+                if (line[0].length() < 1){
+                    continue;
+                }
+                usr = split_by(line[0], " ")[0];
+                t0 = split_by(line[0], " ")[1];
+                t1 = split_by(line[0], " ")[2];
+                t2 = split_by(line[0], " ")[3];
+                Log.d("ActivityMain", "Nombre usr linea "+j+" fichero: "+ usr);
+                if (usr.equals(prep.usrname)){
+                    found = true;
+                    Log.d("ActivityMain", "line["+j+"] == username--> "+ usr + " "+ prep.usrname);
+                    lines[j] = create_String(Integer.parseInt(t0), Integer.parseInt(t1), Integer.parseInt(t2));
+                    Log.d("ActivityMain", "El nuevo String es: "+lines[j]);
+
+                }
+            }
+            if (!found){
+                String str = make_string();
+                writing(str, scores, true);
+                return;
+            }
+            /*for (int i = 0; i< lines.length; i++){
+                Log.d("ActivityMain", "lines["+i+"] = "+lines[i]+"@@");
+            }*/
+            boolean first = true;
+            for (int i = 0; i< lines.length; i++){
+                if (first){
+                    writing(lines[i], scores, false);
+                    first = false;
+                    continue;
+                }
+                writing(lines[i], scores, true);
+            }
+        }
+    }
+
+    private String create_String(int t0, int t1, int t2) {
+        if (t0 >= tc.times[0] || t0 == 0){
+            t0 = tc.times[0];
+        }
+        if (t1 >= tc.times[1]|| t1 == 0){
+            t1 = tc.times[1];
+        }
+        if (t2 >= tc.times[2]|| t2 == 0){
+            t2 = tc.times[2];
+        }
+        return prep.usrname + " " + t0 + " " + t1 + " " + t2 +"\n";
+    }
+
+    private String[] split_by(String line, String s) {
+        return line.split(s);
+    }
+
+    private List<String> readFile(File scores) {
+        List<String> arraylines = new ArrayList<>();
+        try {
+            FileInputStream fs = new FileInputStream(scores);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fs));
+            String line;
+            while((line = br.readLine()) != null){
+                Log.d("ActivityMain", "Leemos -->"+line);
+                arraylines.add(line+"\n");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return arraylines;
+    }
+
+    private String make_string() {
+        String str = prep.usrname;
+        for (int i = 0; i < MAXLEVELS;i++) {
+            str = str + " " + tc.times[i];
+        }
+        return str+"\n";
+    }
+
+    public void checkExternalStorage() {
+
+        String state = Environment.getExternalStorageState();
+
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            mExternalStorageAvaliable = mExternalStorageWriteable = true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            mExternalStorageAvaliable = true;
+            mExternalStorageWriteable = false;
+        } else {
+            mExternalStorageAvaliable = mExternalStorageWriteable = false;
+        }
     }
 
     public void onSaveInstanceState(Bundle state) {

@@ -54,7 +54,7 @@
         android:layout_centerInParent="true"
         android:id="@+id/welcome_scores"
         android:src="@drawable/ic_scores"
-        android:backgroundTint="@android:color/transparent" />
-    <!--android:onClick="showscores"-->
+        android:backgroundTint="@android:color/transparent"
+        android:onClick="showscores"/>
 
 </android.widget.LinearLayout>

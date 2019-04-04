@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class WelcomeActivity extends AppCompatActivity {
+    private String usr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +18,7 @@ public class WelcomeActivity extends AppCompatActivity {
         setImage();
         String usrname = getUsrName(); //mirar si usrname no es null
         //Log.d("WelcomeActivity", usrname);
+        usr = usrname;
         putWelcomeMsg(usrname);
     }
 
@@ -44,11 +46,19 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public void startlevel(View v){
         Intent play = new Intent(WelcomeActivity.this, MainActivity.class);
+        Bundle bdl = new Bundle();
+        bdl.putString("username", usr);
+        play.putExtras(bdl);
         startActivity(play);
     }
 
     public void showhelp(View v) {
         Intent help = new Intent(WelcomeActivity.this, Help.class);
         startActivity(help);
+    }
+
+    public void showscores(View v) {
+        Intent scores = new Intent(WelcomeActivity.this, ScoresActivity.class);
+        startActivity(scores);
     }
 }

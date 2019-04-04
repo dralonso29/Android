@@ -59,8 +59,8 @@
             android:id="@+id/welcome_scores"
             android:src="@drawable/ic_scores"
             android:backgroundTint="@android:color/transparent"
-            android:layout_margin="20sp"/>
-        <!--android:onClick="showscores"-->
+            android:layout_margin="20sp"
+            android:onClick="showscores"/>
     </LinearLayout>
 
 

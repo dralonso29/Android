@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import static alonsod.mov.urjc.xorapp.LevelFactory.MAXLEVELS;
@@ -139,13 +140,14 @@ public class MainActivity extends AppCompatActivity {
         Date initial;
         Date current;
         int[] times;
+        private static final int INIT_TIME = 999999999; // 11 dias y medio en ms
         TimeControler(){
             times = new int[MAXLEVELS];
         }
 
         private void initTimes(){
             for (int i = 0; i<MAXLEVELS;i++){
-                times[i] = 0;
+                times[i] = INIT_TIME;
             }
         }
         private void setInitial(Date d) {
@@ -168,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
     PrepareLevel prep;
     LevelFactory lf;
     TimeControler tc;
+
     boolean mExternalStorageAvaliable = false;
     boolean mExternalStorageWriteable = false;
 
@@ -267,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
         return "None";
     }
 
-    private void writing(String str, File scores, boolean append){
+    /*private void writing(String str, File scores, boolean append){
         Log.d("ActivityMain", "append :"+append);
         try {
             BufferedOutputStream output = new
@@ -278,18 +281,37 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     private void writeFileScores() {
         checkExternalStorage();
         if(mExternalStorageWriteable) {
+            StoreUsers st_users = new StoreUsers(prep.usrname, tc.times);
+
             File route = getExternalFilesDir("XorApp");
             Log.d("MainActivity ", "LA RUTA: "+route);
             Log.d("MainActivity","Storage Avaliable: "+mExternalStorageAvaliable);
             Log.d("MainActivity","Storage Writeable: "+mExternalStorageWriteable);
             File scores = new File(route, "scores.txt");
-            List<String> arraylines = readFile(scores);
-            boolean append = false;
+            st_users.readFile(scores);
+
+            if (st_users.hsmp.isEmpty()) { // if file empty,(and hash map too) we write directly
+                Log.d("ActivityMain", "El hash map esta vacio");
+                String str = st_users.make_string(tc.times);
+                st_users.writeOn(str, scores, false);
+                return;
+            }
+            Log.d("ActivityMain", "El hash map NO esta vacio: "+st_users.getValue());
+
+            if (!st_users.userFound()){ //first time user plays but file not empty
+                String str = st_users.make_string(tc.times);
+                st_users.writeOn(str, scores, true);
+                return;
+            }
+            st_users.modify_HashMap();
+            Log.d("ActivityMain", "La key de pepe es (actualizada): "+st_users.getValue());
+            st_users.writing(scores);
+            /*boolean append = false;
             String[] lines = new String[arraylines.size()];
             arraylines.toArray(lines);
             String[] line;
@@ -297,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
             String t0, t1, t2;
             boolean found = false;
 
-            if (arraylines.isEmpty()) { // si esta vacio el fichero, escribimos directamente
+            if (hsmp.isEmpty()) { // si esta vacio el fichero, escribimos directamente
                 String str = make_string();
                 writing(str, scores, append);
                 return;
@@ -327,9 +349,9 @@ public class MainActivity extends AppCompatActivity {
                 writing(str, scores, true);
                 return;
             }
-            /*for (int i = 0; i< lines.length; i++){
+            *//*for (int i = 0; i< lines.length; i++){
                 Log.d("ActivityMain", "lines["+i+"] = "+lines[i]+"@@");
-            }*/
+            }*//*
             boolean first = true;
             for (int i = 0; i< lines.length; i++){
                 if (first){
@@ -338,11 +360,11 @@ public class MainActivity extends AppCompatActivity {
                     continue;
                 }
                 writing(lines[i], scores, true);
-            }
+            }*/
         }
     }
 
-    private String create_String(int t0, int t1, int t2) {
+    /*private String create_String(int t0, int t1, int t2) {
         if (t0 >= tc.times[0] || t0 == 0){
             t0 = tc.times[0];
         }
@@ -359,32 +381,13 @@ public class MainActivity extends AppCompatActivity {
         return line.split(s);
     }
 
-    private List<String> readFile(File scores) {
-        List<String> arraylines = new ArrayList<>();
-        try {
-            FileInputStream fs = new FileInputStream(scores);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fs));
-            String line;
-            while((line = br.readLine()) != null){
-                Log.d("ActivityMain", "Leemos -->"+line);
-                arraylines.add(line+"\n"); // este salto de linea es de vital importancia
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return arraylines;
-    }
-
     private String make_string() {
         String str = prep.usrname;
         for (int i = 0; i < MAXLEVELS;i++) {
             str = str + " " + tc.times[i];
         }
         return str+"\n";
-    }
+    }*/
 
     public void checkExternalStorage() {
 

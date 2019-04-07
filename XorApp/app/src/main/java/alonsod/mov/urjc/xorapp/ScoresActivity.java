@@ -79,12 +79,12 @@ public class ScoresActivity extends AppCompatActivity {
         return "Usuario: "+best+" Tiempo empleado: " + beautifyTime(time_best);
     }
 
-    @SuppressLint("DefaultLocale")
     private String beautifyTime(int time_best) {
-        return String.format("%02d minutos %02d segundos", TimeUnit.MILLISECONDS.toMinutes(time_best),
-                TimeUnit.MILLISECONDS.toSeconds(time_best) - TimeUnit.MILLISECONDS.toSeconds(
-                        TimeUnit.MILLISECONDS.toMinutes(time_best)
-                ));
+        time_best = time_best / 1000; //now time_best is on seconds
+        long seconds = time_best % 60;
+        long minutes = (time_best / 60) % 60;
+        long hours = (time_best / (60*60)) % 24;
+        return String.format("%d horas %02d minutos %02d segundos ", hours, minutes, seconds);
     }
 
     private int[] setIdsScores() {

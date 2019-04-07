@@ -39,52 +39,29 @@ public class ScoresActivity extends AppCompatActivity {
         Log.d("ActivityScores", mExternalStorageAvaliable+"");
         String str;
         int[] ids;
+        String aux_user = "None";
+        int[] aux_arr = new int[MAXLEVELS];
 
+        initArrayInt(aux_arr);
         ids = setIdsScores();
         if (mExternalStorageAvaliable) {
+            StoreUsers st_users = new StoreUsers(aux_user, aux_arr); //aux_user and aux_arr will not be used
             File route = getExternalFilesDir("XorApp");
             File scores = new File(route, "scores.txt");
-            List<String> arraylines = readFile(scores);
-            String[] lines = new String[arraylines.size()];
-            arraylines.toArray(lines);
+            st_users.readFile(scores);
+
             for (int i = 0; i < MAXLEVELS; i++){
-                str = setBest(lines, i);
+                str = st_users.setBest(i);
+                Log.d("ScoresActivity", "Nivel "+i+": "+ str);
                 putTextBest(ids[i], str);
             }
         }
     }
 
-    private String setBest(String[] lines, int n) {
-        String user;
-        String time;
-        String best = "";
-        int time_best = 99999999;
-
-        for (int i = 0; i < lines.length;i++){
-            Log.d("ActivityScores", "line:"+lines[i]);
-            user = lines[i].split(" ")[0];
-            Log.d("ActivityScores", "user:"+user);
-            time = lines[i].split(" ")[n+1];
-            Log.d("ActivityScores", "time:"+time);
-            if (Integer.parseInt(time.trim()) <= time_best && Integer.parseInt(time.trim()) > 0){
-                time_best = Integer.parseInt(time.trim());
-                best = user;
-            }
+    private void initArrayInt(int[] aux) {
+        for (int i = 0; i < aux.length; i++){
+            aux[i] = 0;
         }
-        Log.d("ActivityScores", "Best usr:"+best);
-        Log.d("ActivityScores", "Best time:"+time_best);
-        if (time_best == 99999999){
-            return "Aún no hay registros";
-        }
-        return "Usuario: "+best+" Tiempo empleado: " + beautifyTime(time_best);
-    }
-
-    private String beautifyTime(int time_best) {
-        time_best = time_best / 1000; //now time_best is on seconds
-        long seconds = time_best % 60;
-        long minutes = (time_best / 60) % 60;
-        long hours = (time_best / (60*60)) % 24;
-        return String.format("%d horas %02d minutos %02d segundos ", hours, minutes, seconds);
     }
 
     private int[] setIdsScores() {

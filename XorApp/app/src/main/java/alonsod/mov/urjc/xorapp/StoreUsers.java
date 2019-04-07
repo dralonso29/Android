@@ -1,6 +1,7 @@
 package alonsod.mov.urjc.xorapp;
 
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -83,7 +84,6 @@ public class StoreUsers {
                 Log.d("StoreUsers", "parsed[0]: "+parsed[0]);
                 Log.d("StoreUsers", "parsed[1]: "+parsed[1]+"@@@@");
                 putOnHashMap(parsed);
-                /*arraylines.add(line + "\n"); // este salto de linea es de vital importancia*/
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -165,5 +165,37 @@ public class StoreUsers {
             }
             writeOn(str, scores, true);
         }
+    }
+
+    public String setBest(int n) {
+        String user;
+        String time;
+        String best = "";
+        int time_best = 99999999;
+
+        for (HashMap.Entry<String, String> hash: hsmp.entrySet()){
+            user = hash.getKey();
+            Log.d("ActivityScores", "user:"+user);
+            time = hash.getValue().split(" ")[n];
+            Log.d("ActivityScores", "time:"+time);
+            if (Integer.parseInt(time.trim()) <= time_best && Integer.parseInt(time.trim()) > 0){
+                time_best = Integer.parseInt(time.trim());
+                best = user;
+            }
+        }
+        Log.d("ActivityScores", "Best usr:"+best);
+        Log.d("ActivityScores", "Best time:"+time_best);
+        if (time_best == 99999999){
+            return "Aún no hay registros";
+        }
+        return "Usuario: "+best+" Tiempo empleado: " + beautifyTime(time_best);
+    }
+
+    private String beautifyTime(int time_best) {
+        time_best = time_best / 1000; //now time_best is on seconds
+        long seconds = time_best % 60;
+        long minutes = (time_best / 60) % 60;
+        long hours = (time_best / (60*60)) % 24;
+        return String.format("%d horas %02d minutos %02d segundos ", hours, minutes, seconds);
     }
 }

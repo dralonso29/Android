@@ -285,13 +285,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void writeFileScores() {
         checkExternalStorage();
-        if(mExternalStorageWriteable) {
+        if (mExternalStorageWriteable) {
             StoreUsers st_users = new StoreUsers(prep.usrname, tc.times);
 
             File route = getExternalFilesDir("XorApp");
-            Log.d("MainActivity ", "LA RUTA: "+route);
-            Log.d("MainActivity","Storage Avaliable: "+mExternalStorageAvaliable);
-            Log.d("MainActivity","Storage Writeable: "+mExternalStorageWriteable);
+            Log.d("MainActivity ", "LA RUTA: " + route);
+            Log.d("MainActivity", "Storage Avaliable: " + mExternalStorageAvaliable);
+            Log.d("MainActivity", "Storage Writeable: " + mExternalStorageWriteable);
             File scores = new File(route, "scores.txt");
             st_users.readFile(scores);
 
@@ -301,93 +301,18 @@ public class MainActivity extends AppCompatActivity {
                 st_users.writeOn(str, scores, false);
                 return;
             }
-            Log.d("ActivityMain", "El hash map NO esta vacio: "+st_users.getValue());
+            Log.d("ActivityMain", "El hash map NO esta vacio: " + st_users.getValue());
 
-            if (!st_users.userFound()){ //first time user plays but file not empty
+            if (!st_users.userFound()) { //first time user plays but file not empty
                 String str = st_users.make_string(tc.times);
                 st_users.writeOn(str, scores, true);
                 return;
             }
             st_users.modify_HashMap();
-            Log.d("ActivityMain", "La key de pepe es (actualizada): "+st_users.getValue());
+            Log.d("ActivityMain", "La key de pepe es (actualizada): " + st_users.getValue());
             st_users.writing(scores);
-            /*boolean append = false;
-            String[] lines = new String[arraylines.size()];
-            arraylines.toArray(lines);
-            String[] line;
-            String usr;
-            String t0, t1, t2;
-            boolean found = false;
-
-            if (hsmp.isEmpty()) { // si esta vacio el fichero, escribimos directamente
-                String str = make_string();
-                writing(str, scores, append);
-                return;
-            }
-
-            for (int j = 0; j < lines.length; j++){
-                Log.d("ActivityMain", "lines["+j+"] = "+ lines[j]);
-                line = split_by(lines[j], "\n");
-                if (line[0].length() < 1){
-                    continue;
-                }
-                usr = split_by(line[0], " ")[0];
-                t0 = split_by(line[0], " ")[1];
-                t1 = split_by(line[0], " ")[2];
-                t2 = split_by(line[0], " ")[3];
-                Log.d("ActivityMain", "Nombre usr linea "+j+" fichero: "+ usr);
-                if (usr.equals(prep.usrname)){
-                    found = true;
-                    Log.d("ActivityMain", "line["+j+"] == username--> "+ usr + " "+ prep.usrname);
-                    lines[j] = create_String(Integer.parseInt(t0), Integer.parseInt(t1), Integer.parseInt(t2));
-                    Log.d("ActivityMain", "El nuevo String es: "+lines[j]);
-
-                }
-            }
-            if (!found){
-                String str = make_string();
-                writing(str, scores, true);
-                return;
-            }
-            *//*for (int i = 0; i< lines.length; i++){
-                Log.d("ActivityMain", "lines["+i+"] = "+lines[i]+"@@");
-            }*//*
-            boolean first = true;
-            for (int i = 0; i< lines.length; i++){
-                if (first){
-                    writing(lines[i], scores, false);
-                    first = false;
-                    continue;
-                }
-                writing(lines[i], scores, true);
-            }*/
         }
     }
-
-    /*private String create_String(int t0, int t1, int t2) {
-        if (t0 >= tc.times[0] || t0 == 0){
-            t0 = tc.times[0];
-        }
-        if (t1 >= tc.times[1]|| t1 == 0){
-            t1 = tc.times[1];
-        }
-        if (t2 >= tc.times[2]|| t2 == 0){
-            t2 = tc.times[2];
-        }
-        return prep.usrname + " " + t0 + " " + t1 + " " + t2 +"\n";
-    }
-
-    private String[] split_by(String line, String s) {
-        return line.split(s);
-    }
-
-    private String make_string() {
-        String str = prep.usrname;
-        for (int i = 0; i < MAXLEVELS;i++) {
-            str = str + " " + tc.times[i];
-        }
-        return str+"\n";
-    }*/
 
     public void checkExternalStorage() {
 

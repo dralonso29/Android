@@ -31,7 +31,7 @@ public class NameActivity extends AppCompatActivity {
     }
 
     public void showmenu(View view) {
-        EditText username = findViewById(R.id.username_button);
+        EditText username = findViewById(R.id.username_edittext);
         String usr = username.getText()+"";
         if (isValidUsrName(usr)){
             //Log.d("NameActivity","Usuario: "+ usr);

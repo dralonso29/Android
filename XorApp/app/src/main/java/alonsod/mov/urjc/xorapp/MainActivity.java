@@ -17,28 +17,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 import static alonsod.mov.urjc.xorapp.LevelFactory.MAXLEVELS;
 import static alonsod.mov.urjc.xorapp.LevelFactory.MAXTOGGLES;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final int MAXLINES = 1024;
 
     public class PrepareLevel {
         int NLEVEL;
@@ -70,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 toggle.setTextOff(Character.toString((char) (TOGGNAME+i)) + " = 0");
                 toggle.setTextOn(Character.toString((char) (TOGGNAME+i)) + " = 1");
                 toggle.setChecked(false);
+                toggle.setId(i);
                 toggle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
                 lay.addView(toggle);
                 arraytog[i] = toggle;
@@ -269,19 +256,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return "None";
     }
-
-    /*private void writing(String str, File scores, boolean append){
-        Log.d("ActivityMain", "append :"+append);
-        try {
-            BufferedOutputStream output = new
-                    BufferedOutputStream(new FileOutputStream(scores, append));
-            DataOutputStream data = new DataOutputStream(output);
-            data.writeBytes(str);
-            data.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 
     private void writeFileScores() {
         checkExternalStorage();

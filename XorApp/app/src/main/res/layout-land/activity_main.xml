@@ -5,7 +5,7 @@
     android:id="@+id/myLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context=".MainActivity"
     android:background="@drawable/ic_bck03">
 
@@ -13,38 +13,54 @@
         android:id="@+id/level_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:textSize="20sp" />
+        android:textSize="70sp" />
 
     <LinearLayout
-        android:id="@+id/linearToggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="40dp"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:id="@+id/linearToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="40dp"
+            android:orientation="vertical">
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/img_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@android:dimen/app_icon_size"
+            android:layout_marginTop="40dp"
+            android:scaleType="fitXY" />
+        <!--android:src="@drawable/ic_level1"-->
+
+        <Button
+            android:id="@+id/nextbut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="@string/summitBut"
+            android:textSize="20sp" />
+
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/img_level"
+    <TextView
+        android:id="@+id/fails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@android:dimen/app_icon_size"
-        android:layout_marginTop="40dp"
-        android:scaleType="fitXY" />
-    <!--android:src="@drawable/ic_level1"-->
+        android:layout_marginTop="10dp"
+        android:textSize="30sp" />
 
-    <Button
-        android:id="@+id/nextbut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:text="@string/summitBut"
-        android:textSize="20sp" />
 
 
 </android.widget.LinearLayout>

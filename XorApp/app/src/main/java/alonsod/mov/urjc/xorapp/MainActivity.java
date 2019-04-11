@@ -17,6 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,10 +40,12 @@ public class MainActivity extends AppCompatActivity {
         boolean[] passed;
         Resources rso;
         String usrname;
+        int MAXFAILURES;
 
         PrepareLevel() {
             lay = findViewById(R.id.linearToggle);
             NLEVEL = 0;
+            MAXFAILURES = 2;
             TOGGNAME = 'A';
             arraytog = new ToggleButton[MAXTOGGLES];
             entradas = new boolean[MAXTOGGLES];
@@ -121,6 +126,23 @@ public class MainActivity extends AppCompatActivity {
                 passed[i] = false;
             }
         }
+
+        public int getNLEVEL(){
+            return NLEVEL;
+        }
+
+        public String getUsrname(){
+            return usrname;
+        }
+
+        public TextView getTextViewFails() {
+            return findViewById(R.id.fails);
+        }
+
+        public void setFailsText() {
+            TextView txt = getTextViewFails();
+            txt.setText("Fallos permitidos: "+MAXFAILURES);
+        }
     }
 
     public class TimeControler{
@@ -167,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
         LevelFactory mylf;
         ImageView imgv;
         TextView textv;
+        Button next;
 
         NextButt(PrepareLevel prep, Level level, LevelFactory lf, ImageView imgv, TextView textv) {
             p = prep;
@@ -174,23 +197,27 @@ public class MainActivity extends AppCompatActivity {
             mylf = lf;
             this.imgv = imgv;
             this.textv = textv;
+            next = findViewById(R.id.nextbut);
         }
 
         @Override
         public void onClick(View v) {
             int time = Toast.LENGTH_SHORT;
 
+
             Toast msg;
-            Button next = findViewById(R.id.nextbut);
             String mymsg;
             if(mylevel.SalidaBuena(p.getButtonsStatus()) && !mylevel.SalidaMala(p.getButtonsStatus())){
                 tc.setCurrent(Calendar.getInstance().getTime());
                 Log.d("MainActivity: Date: currentTime", tc.current.toString());
-                Log.d("MainActivity: Date: diff", tc.getDiffTime()+"");
+                Log.d("MainActivity: Date: diff", "Diff Nivel "+p.NLEVEL+": "+tc.getDiffTime()+"");
                 tc.times[p.NLEVEL] = (int) tc.getDiffTime();
+                Log.d("MainActivity: Tiempo del nivel[i]", "Tiempo del nivel["+p.NLEVEL+"]: "+tc.times[p.NLEVEL]);
                 writeFileScores();
                 p.NLEVEL++;
                 if (p.NLEVEL < MAXLEVELS) {
+                    prep.MAXFAILURES = 2;
+                    prep.setFailsText();
                     p.passed[p.NLEVEL] = true;
                     mymsg = "Enhorabuena, " + mylevel.getLevelName() + " completado!";
                     msg = Toast.makeText(MainActivity.this, mymsg, time);
@@ -203,6 +230,16 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 mymsg = "HAS COMPLETADO TODOS LOS NIVELES!";
+                msg = Toast.makeText(MainActivity.this, mymsg, time);
+                msg.show();
+                next.setVisibility(View.GONE);
+                return;
+            }
+            prep.resetButtons();
+            prep.MAXFAILURES--;
+            prep.setFailsText();
+            if (prep.MAXFAILURES == 0){
+                mymsg = "HAS PERDIDO";
                 msg = Toast.makeText(MainActivity.this, mymsg, time);
                 msg.show();
                 next.setVisibility(View.GONE);
@@ -233,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
             prep.NLEVEL = savedInstanceState.getInt("nlevel");
             prep.entradas = savedInstanceState.getBooleanArray("stateButtons");
             prep.passed = savedInstanceState.getBooleanArray("passed");
+            prep.MAXFAILURES = savedInstanceState.getInt("fails");
             prep.setStatusButtons(prep.entradas);
         }
 
@@ -245,6 +283,10 @@ public class MainActivity extends AppCompatActivity {
         tc.setInitial(Calendar.getInstance().getTime());
         Log.d("MainActivity: Date: initialTime", tc.initial.toString());
         Button nextbut = findViewById(R.id.nextbut);
+        if (prep.MAXFAILURES == 0){
+            nextbut.setVisibility(View.GONE);
+        }
+        prep.setFailsText();
         nextbut.setOnClickListener(new NextButt(prep, level, lf, imgv, textv));
     }
 
@@ -271,18 +313,18 @@ public class MainActivity extends AppCompatActivity {
 
             if (st_users.hsmp.isEmpty()) { // if file empty,(and hash map too) we write directly
                 Log.d("ActivityMain", "El hash map esta vacio");
-                String str = st_users.make_string(tc.times);
+                String str = st_users.makeString(tc.times);
                 st_users.writeOn(str, scores, false);
                 return;
             }
             Log.d("ActivityMain", "El hash map NO esta vacio: " + st_users.getValue());
 
             if (!st_users.userFound()) { //first time user plays but file not empty
-                String str = st_users.make_string(tc.times);
+                String str = st_users.makeString(tc.times);
                 st_users.writeOn(str, scores, true);
                 return;
             }
-            st_users.modify_HashMap();
+            st_users.modifyHashMap();
             Log.d("ActivityMain", "La key de pepe es (actualizada): " + st_users.getValue());
             st_users.writing(scores);
         }
@@ -306,6 +348,7 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(state);
         state.putBooleanArray("stateButtons", prep.getButtonsStatus());
         state.putInt("nlevel", prep.NLEVEL);
+        state.putInt("fails", prep.MAXFAILURES);
         state.putBooleanArray("passed", prep.passed);
     }
 
@@ -336,6 +379,8 @@ public class MainActivity extends AppCompatActivity {
                     level = lf.produce(prep.NLEVEL);
                     level.loadLevel();
                     tc.setInitial(Calendar.getInstance().getTime());
+                    prep.MAXFAILURES = 2;
+                    prep.setFailsText();
                     Log.d("MainActivity: Date: initialTime (Menu)", tc.initial.toString());
                     next.setOnClickListener(new NextButt(prep, level, lf, prep.getImgViewLevel(), prep.getTextViewHeader()));
                     next.setVisibility(View.VISIBLE);

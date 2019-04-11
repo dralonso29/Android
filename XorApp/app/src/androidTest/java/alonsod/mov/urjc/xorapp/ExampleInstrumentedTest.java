@@ -1,6 +1,7 @@
 package alonsod.mov.urjc.xorapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -15,6 +16,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.*;
 
@@ -34,24 +37,34 @@ public class ExampleInstrumentedTest {
     }
 
     @Rule
-    public ActivityTestRule<NameActivity> mNameActivityRule = new ActivityTestRule<>(NameActivity.class);
+    public ActivityTestRule<MainActivity> mNameActivityRule = new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Test
-    public void passGame_sameActivity() {
+    public void testMainActivity() {
         int TOGGLE_A = 0;
         int TOGGLE_B = 1;
         int TOGGLE_C = 2;
         int TOGGLE_D = 3;
-        onView(withId(R.id.username_edittext))
+
+        Intent intent = new Intent();
+        intent.putExtra("username", "Test");
+        mNameActivityRule.launchActivity(intent);
+
+        /*onView(withId(R.id.username_edittext))
                 .perform(typeText("alonsod"), closeSoftKeyboard());
         onView(withId(R.id.summit)).perform(click());
-        onView(withId(R.id.play)).perform(click());
-        onView(withId(TOGGLE_C)).perform(click());
+        onView(withId(R.id.play)).perform(click());*/
+        onView(withId(TOGGLE_A)).perform(click()).check(matches(isEnabled()));
+        onView(withId(TOGGLE_B)).perform(click()).check(matches(isEnabled()));
+        onView(withId(TOGGLE_D)).perform(click()).check(matches(isEnabled()));
         onView(withId(R.id.nextbut)).perform(click());
-        onView(withId(TOGGLE_A)).perform(click());
-        onView(withId(TOGGLE_B)).perform(click());
-        onView(withId(TOGGLE_C)).perform(click());
+        onView(withId(TOGGLE_C)).perform(click()).check(matches(isEnabled()));
         onView(withId(R.id.nextbut)).perform(click());
-        onView(withId(TOGGLE_B)).perform(click());
+        onView(withId(TOGGLE_A)).perform(click()).check(matches(isEnabled()));
+        onView(withId(TOGGLE_B)).perform(click()).check(matches(isEnabled()));
+        onView(withId(TOGGLE_C)).perform(click()).check(matches(isEnabled()));
+        onView(withId(R.id.nextbut)).perform(click());
+        onView(withId(TOGGLE_B)).perform(click()).check(matches(isEnabled()));
+        onView(withId(R.id.nextbut)).perform(click());
     }
 }

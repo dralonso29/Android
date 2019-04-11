@@ -93,7 +93,7 @@ public class StoreUsers {
     }
 
 
-    public String make_string(int[] times) {
+    public String makeString(int[] times) {
         String str = username;
         for (int i = 0; i < MAXLEVELS;i++) {
             str = str + " " + times[i];
@@ -127,7 +127,7 @@ public class StoreUsers {
         return str;
     }
 
-    public void modify_HashMap() {
+    public void modifyHashMap() {
         String value;
         int[] times_file = getTimesString(username);
         for (int i = 0; i < MAXLEVELS; i++){

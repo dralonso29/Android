@@ -87,25 +87,6 @@ public class ScoresActivity extends AppCompatActivity {
         imgv.setImageResource(id);
     }
 
-    private List<String> readFile(File scores) {
-        List<String> arraylines = new ArrayList<>();
-        try {
-            FileInputStream fs = new FileInputStream(scores);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fs));
-            String line;
-            while((line = br.readLine()) != null){
-                Log.d("ActivityMain", "Leemos -->"+line);
-                arraylines.add(line+"\n"); // este salto de linea es de vital importancia
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return arraylines;
-    }
-
     public void checkExternalStorage() {
 
         String state = Environment.getExternalStorageState();

@@ -248,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        boolean newInitial = true;
         tc = new TimeControler();
         prep = new PrepareLevel();
         prep.createButtons(MAXTOGGLES);
@@ -260,10 +261,12 @@ public class MainActivity extends AppCompatActivity {
                 prep.getImagesIds(), imgv, textv);
 
         if (savedInstanceState != null){
+            newInitial = false;
             prep.NLEVEL = savedInstanceState.getInt("nlevel");
             prep.entradas = savedInstanceState.getBooleanArray("stateButtons");
             prep.passed = savedInstanceState.getBooleanArray("passed");
             prep.MAXFAILURES = savedInstanceState.getInt("fails");
+            tc.setInitial((Date) savedInstanceState.getSerializable("date"));
             prep.setStatusButtons(prep.entradas);
         }
 
@@ -272,7 +275,9 @@ public class MainActivity extends AppCompatActivity {
 
         Level level = lf.produce(prep.NLEVEL);
         level.loadLevel();
-        tc.setInitial(Calendar.getInstance().getTime());
+        if (newInitial){
+            tc.setInitial(Calendar.getInstance().getTime());
+        }
         Button nextbut = findViewById(R.id.nextbut);
         if (prep.MAXFAILURES == 0){
             nextbut.setVisibility(View.GONE);
@@ -335,6 +340,7 @@ public class MainActivity extends AppCompatActivity {
         state.putInt("nlevel", prep.NLEVEL);
         state.putInt("fails", prep.MAXFAILURES);
         state.putBooleanArray("passed", prep.passed);
+        state.putSerializable("date", tc.initial);
     }
 
     @Override

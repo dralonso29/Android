@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,8 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.Calendar;
@@ -209,10 +206,7 @@ public class MainActivity extends AppCompatActivity {
             String mymsg;
             if(mylevel.SalidaBuena(p.getButtonsStatus()) && !mylevel.SalidaMala(p.getButtonsStatus())){
                 tc.setCurrent(Calendar.getInstance().getTime());
-                Log.d("MainActivity: Date: currentTime", tc.current.toString());
-                Log.d("MainActivity: Date: diff", "Diff Nivel "+p.NLEVEL+": "+tc.getDiffTime()+"");
                 tc.times[p.NLEVEL] = (int) tc.getDiffTime();
-                Log.d("MainActivity: Tiempo del nivel[i]", "Tiempo del nivel["+p.NLEVEL+"]: "+tc.times[p.NLEVEL]);
                 writeFileScores();
                 p.NLEVEL++;
                 if (p.NLEVEL < MAXLEVELS) {
@@ -226,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
                     mylevel = mylf.produce(p.NLEVEL); //update level
                     mylevel.loadLevel();
                     tc.setInitial(tc.current);
-                    Log.d("MainActivity: Date: initialTime (Actualizado)", tc.initial.toString());
                     return;
                 }
                 mymsg = "HAS COMPLETADO TODOS LOS NIVELES!";
@@ -275,13 +268,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         prep.usrname = getUsrName();
-        Log.d("ActivityMain", prep.usrname);
         writeFileScores();
 
         Level level = lf.produce(prep.NLEVEL);
         level.loadLevel();
         tc.setInitial(Calendar.getInstance().getTime());
-        Log.d("MainActivity: Date: initialTime", tc.initial.toString());
         Button nextbut = findViewById(R.id.nextbut);
         if (prep.MAXFAILURES == 0){
             nextbut.setVisibility(View.GONE);
@@ -305,19 +296,14 @@ public class MainActivity extends AppCompatActivity {
             StoreUsers st_users = new StoreUsers(prep.usrname, tc.times);
 
             File route = getExternalFilesDir("XorApp");
-            Log.d("MainActivity ", "LA RUTA: " + route);
-            Log.d("MainActivity", "Storage Avaliable: " + mExternalStorageAvaliable);
-            Log.d("MainActivity", "Storage Writeable: " + mExternalStorageWriteable);
             File scores = new File(route, "scores.txt");
             st_users.readFile(scores);
 
             if (st_users.hsmp.isEmpty()) { // if file empty,(and hash map too) we write directly
-                Log.d("ActivityMain", "El hash map esta vacio");
                 String str = st_users.makeString(tc.times);
                 st_users.writeOn(str, scores, false);
                 return;
             }
-            Log.d("ActivityMain", "El hash map NO esta vacio: " + st_users.getValue());
 
             if (!st_users.userFound()) { //first time user plays but file not empty
                 String str = st_users.makeString(tc.times);
@@ -325,7 +311,6 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             st_users.modifyHashMap();
-            Log.d("ActivityMain", "La key de pepe es (actualizada): " + st_users.getValue());
             st_users.writing(scores);
         }
     }
@@ -381,7 +366,6 @@ public class MainActivity extends AppCompatActivity {
                     tc.setInitial(Calendar.getInstance().getTime());
                     prep.MAXFAILURES = 2;
                     prep.setFailsText();
-                    Log.d("MainActivity: Date: initialTime (Menu)", tc.initial.toString());
                     next.setOnClickListener(new NextButt(prep, level, lf, prep.getImgViewLevel(), prep.getTextViewHeader()));
                     next.setVisibility(View.VISIBLE);
                     return true;

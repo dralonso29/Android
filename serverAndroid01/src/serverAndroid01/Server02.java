@@ -10,9 +10,14 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.sql.Time;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Server02 {
-	public static void main(String[] args) throws IOException, ClassNotFoundException{
+	//private static final long TIMEWAIT = 10000; // 10 seconds
+
+	public static void main(String[] args) throws Exception{
 		//String host = "127.0.0.1";
 		String ADDRESS = InetAddress.getLocalHost().getHostName();/*InetAddress.getByName(host);*/
 		System.out.println(ADDRESS);
@@ -27,35 +32,63 @@ public class Server02 {
 				s = serverS.accept();
 				System.out.println("A client is connected: "+s.getInetAddress().getHostName());
 				//showMessages(s);
-				
-				/*lo suyo seria que el cliente le escribiese el pc del que quiere saber 
-				 * la temperatura*/
-				getTemperature();
+				processClientRequest(s);
 			}	
 		}finally {
 			serverS.close();
 		}
 	}
+	
+	public static String createAnswer(String temperatura) {
+		String pattern = "yyyy/MM/dd HH:mm:ss";
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
+		LocalDateTime now = LocalDateTime.now();
+		if(temperatura.length() < 1) {
+			return dtf.format(now) + " None";
+		}
+		return dtf.format(now) + " " + temperatura;
+	}
 
-	private static void getTemperature() {
-		//String command = "ls *.cap";
-		/*Para no verificar la SHA y que se quede pillado: ssh -o "StrictHostKeyChecking no" alonsod@delta04.aulas.gsyc.urjc.es
-*/
+	private static void processClientRequest(Socket s) throws Exception {
+		String request = clientRequest(s);
+		System.out.println("La consulta del usuario es: "+request+"&&&");
+		if (request != null) {
+			String temperature = getTemperature(request);
+			String answer = createAnswer(temperature);
+			sendAnswer(s, answer);
+//			if(!answerWasReceived(s)) { //  if Client no receives temperature
+//				sendAnswer(s, answer); // (Re)send answer
+//			}
+		}
+	}
 
-		String command = "ssh -i ~/.ssh/android_ed25519 alonsod@delta01 cat /sys/class/thermal/thermal_zone*/temp";
+	private static boolean answerWasReceived(Socket s) throws IOException, InterruptedException {
+		//Thread.sleep(TIMEWAIT);
+		BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+		return in.readLine() == "ok";
+	}
+
+	private static String clientRequest(Socket s) throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+		return in.readLine();
+	}
+
+	private static String getTemperature(String host) throws Exception {
+		String command = "ssh -i ~/.ssh/android_ed25519 -o StrictHostKeyChecking=no alonsod@"+host+" cat /sys/class/thermal/thermal_zone0/temp";
 		Runtime rt = Runtime.getRuntime();
-		StringBuilder output = new StringBuilder();
+		String output = "";
+		
 		try {
-			System.out.println("Dentro del try catch");
+//			System.out.println("Dentro del try catch");
 			Process p = rt.exec(command);
-			System.out.println("Ejecutamos el comando: "+ command);
+//			System.out.println("Ejecutamos el comando: "+ command);
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(p.getInputStream()));
-			System.out.println("Despues del BufferedReader");
+//			System.out.println("Despues del BufferedReader");
 			String line;
 			while ((line = reader.readLine()) != null) {
-				System.out.println("LEEMOS: "+line+"\n");
-				output.append(line + "\n");
+//				System.out.println("LEEMOS: "+line+"\n");
+				output = output + line + "\n";
 			}
 			
 			int exitVal;
@@ -63,8 +96,14 @@ public class Server02 {
 			if (exitVal == 0) {
 				System.out.println("Success!");
 				System.out.println(output);
-				System.exit(0);
 			}
+			//System.out.println("output: "+output+", length: "+ output.length());
+			return output;
+//			if (exitVal == 255){
+//				/*throw new Exception("An error ocurred with SSH: Error code: "+exitVal+
+//						" ,Command: "+command);*/
+//				return
+//			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -72,21 +111,13 @@ public class Server02 {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		return output;
 	}
+	
+	
 
-	private static void showMessages(Socket s) throws IOException, ClassNotFoundException {
-		DataInputStream in;
-		String messageClient;
-		try {
-			in = new DataInputStream(s.getInputStream());
-            PrintWriter salida = new PrintWriter(s.getOutputStream(), true);
-            salida.println("Escribe lo que quieras");
-            messageClient = (String) in.readUTF();
-            System.out.println(messageClient);
-            in.close();
-		} finally {
-            s.close();
-        }
+	private static void sendAnswer(Socket s, String answer) throws IOException, ClassNotFoundException {
+		PrintWriter salida = new PrintWriter(s.getOutputStream(), true);
+        salida.println(answer);
 	}	
 }

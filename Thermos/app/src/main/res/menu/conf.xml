@@ -1,4 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/menu">
+
+    <item
+        android:id="@+id/menu_help"
+        android:title="Help"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_alpha"
+        android:title="alpha">
+        <menu>
+            <item
+                android:id="@+id/menu_alpha01"
+                android:title="alpha01" />
+            <item
+                android:id="@+id/menu_alpha02"
+                android:title="alpha02" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_beta"
+        android:title="beta">
+        <menu>
+            <item
+                android:id="@+id/menu_beta01"
+                android:title="beta01" />
+            <item
+                android:id="@+id/menu_beta02"
+                android:title="beta02" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_delta"
+        android:title="delta">
+        <menu>
+            <item
+                android:id="@+id/menu_delta01"
+                android:title="delta01" />
+            <item
+                android:id="@+id/menu_delta02"
+                android:title="delta02" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_epsilon"
+        android:title="epsilon">
+        <menu>
+            <item
+                android:id="@+id/menu_epsilon01"
+                android:title="epsilon01" />
+            <item
+                android:id="@+id/menu_epsilon02"
+                android:title="epsilon02" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_gamma"
+        android:title="gamma">
+        <menu>
+            <item
+                android:id="@+id/menu_gamma01"
+                android:title="gamma01" />
+            <item
+                android:id="@+id/menu_gamma02"
+                android:title="gamma02" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_zeta"
+        android:title="zeta">
+        <menu>
+            <item
+                android:id="@+id/menu_zeta01"
+                android:title="zeta01" />
+            <item
+                android:id="@+id/menu_zeta02"
+                android:title="zeta02" />
+        </menu>
+    </item>
 
 </menu>

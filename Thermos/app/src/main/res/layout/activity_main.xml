@@ -17,4 +17,21 @@
         android:layout_gravity="center"
         android:layout_marginTop="30dp"/>
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="startGraphActivity"
+        android:id="@+id/IBGraph"
+        android:src="@drawable/ic_start01"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="startHelpActivity"
+        android:id="@+id/IBHelp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_help01"/>
+
 </android.widget.LinearLayout>

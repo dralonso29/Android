@@ -23,7 +23,8 @@
         android:layout_gravity="center"
         android:onClick="startGraphActivity"
         android:id="@+id/IBGraph"
-        android:src="@drawable/ic_start01"/>
+        android:src="@drawable/ic_start01"
+        android:backgroundTint="@android:color/transparent"/>
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -32,6 +33,7 @@
         android:onClick="startHelpActivity"
         android:id="@+id/IBHelp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/ic_help01"/>
+        android:src="@drawable/ic_help01"
+        android:backgroundTint="@android:color/transparent"/>
 
 </android.widget.LinearLayout>

@@ -8,17 +8,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Calendar;
 
 public class GraphActivity extends AppCompatActivity {
     private static final String MACHINES[] = {"alpha", "beta", "delta", "epsilon", "gamma", "zeta"};
@@ -28,14 +26,17 @@ public class GraphActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
-        setImageInfo();
+        setVisibleImageInfo(true);
     }
 
-    private void setImageInfo() {
+    private void setVisibleImageInfo(boolean visible) {
         String img_info_graph = "ic_infograph01";
         int id = getResources().getIdentifier(img_info_graph, "drawable", getPackageName());
         ImageView imgv = findViewById(R.id.info_graph);
         imgv.setImageResource(id);
+        if (!visible){
+            imgv.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -48,18 +49,20 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int myItem = item.getItemId();
-        String nameItem = (String) item.getTitle();
+        String machine = (String) item.getTitle();
         switch (myItem) {
             case R.id.menu_help:
                 Intent help = new Intent(GraphActivity.this, HelpActivity.class);
                 startActivity(help);
                 return true;
             default:
-                Log.d("GraphActivity", "item:"+nameItem);
-                if (isMachineName(nameItem)){
+                Log.d("GraphActivity", "item:"+machine);
+                if (isMachineName(machine)){
                     Log.d("GraphActivity", "YEEES: item:"+item.getTitle());
                     // llamar a la funcion que pida la temperatura de la maquina
-                    getTemp(nameItem);
+                    getTemp(machine);
+                    setVisibleImageInfo(false);
+                    //showGraph(machine);
                     return true;
                 }
                 return super.onOptionsItemSelected(item);
@@ -81,8 +84,14 @@ public class GraphActivity extends AppCompatActivity {
                     rc.writeTo(dos);
                     Messages replyToServer = Messages.readFrom(dis);
                     if (replyToServer != null) {
-                        Log.d("GraphActivity", "Respuesta: " + dis.readUTF());
-                        replyToServer.writeTo(dos);
+                        String request = dis.readUTF();
+                        Log.d("GraphActivity", "Respuesta: " + request);
+                        FilesMachines.checkExternalStorage();
+                        if (FilesMachines.isStorageWriteable()){
+                            File file = FilesMachines.getFile(machine, GraphActivity.this); // add new Temperature to file
+                            FilesMachines.writeOn(request, file, true);
+                        }
+                        //replyToServer.writeTo(dos);
                     }
                 }catch (ConnectException e) {
                     System.out.println("Connection refused "+ e);
@@ -94,13 +103,18 @@ public class GraphActivity extends AppCompatActivity {
             }
         };
         c.start();
+        try {
+            c.join(); //we must wait thread because of readding from file later
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean isMachineName(String nameItem) {
         for (int i = 1; i <= NMACHINE; i++){
             for (String vmachine: MACHINES){
                 String machine = vmachine+"0"+i; // alpha01, beta01 ...
-                Log.d("GraphActivity", "isMachineName: machine: "+machine);
+                //Log.d("GraphActivity", "isMachineName: machine: "+machine);
                 if (machine.equals(nameItem)) {
                     return true;
                 }

@@ -3,6 +3,9 @@ package alonsod.mov.urjc.thermos;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
@@ -15,15 +18,11 @@ public abstract class Messages {
     public abstract TypeMessage typeMessage();
     public abstract void writeTo(DataOutputStream dos);
     private final static TypeMessage[] valuesTypeMessage = TypeMessage.values();
-    public static TypeMessage getTypeMessage(int pos) {
-        return valuesTypeMessage[pos];
-    }
     public static Messages readFrom(DataInputStream dis) {
         try {
-            switch (getTypeMessage(dis.readInt())) {
+            switch (valuesTypeMessage[dis.readInt()]) {
                 case REQ_MACHINE_TEMP:
-                    String machine = dis.readUTF();
-                    return new ReplyServer(machine);
+                    return new ReplyServer();
                 case REP_MACHINE_TEMP:
                     return new ReplyReceived();
                 case RECEIVED_REP:
@@ -42,11 +41,9 @@ public abstract class Messages {
 
     public static class RequestClient extends Messages {
         // peticion del cliente hacia el server
-        String machine;
+
         private static final TypeMessage CLIENTREQUEST = TypeMessage.REQ_MACHINE_TEMP;
-        RequestClient(String machine){
-            this.machine = machine;
-        }
+
         @Override
         public TypeMessage typeMessage() { return CLIENTREQUEST; }
         @Override
@@ -54,7 +51,6 @@ public abstract class Messages {
             int typeM = typeMessage().ordinal();
             try {
                 dos.writeInt(typeM);
-                dos.writeUTF(machine);
                 dos.flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -64,43 +60,30 @@ public abstract class Messages {
 
     public static class ReplyServer extends Messages {
         // respuesta del server hacia el cliente
-        String machine;
+
         private static final TypeMessage SERVERREPLY = TypeMessage.REP_MACHINE_TEMP;
 
-        ReplyServer(String machine) {
-            this.machine = machine;
-        }
         @Override
         public TypeMessage typeMessage() { return SERVERREPLY;}
 
         public String getTemperature() {
-            String temperature = "None";
-            String cmd = "cat /sys/class/thermal/thermal_zone0/temp";
-            String ssh_cmd = "ssh -i ~/.ssh/android_ed25519 -o StrictHostKeyChecking=no alonsod@"+machine+" "+cmd;
-            Runtime rt = Runtime.getRuntime();
+            String ruta = "/sys/class/thermal/thermal_zone0/temp";
+            String temp = null;
             try {
-                Process p = rt.exec(ssh_cmd);
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(p.getInputStream()));
+                File f = new File(ruta);
+                FileInputStream fs = new FileInputStream(f);
+                BufferedReader br = new BufferedReader(new InputStreamReader(fs));
                 String line;
-                while ((line = reader.readLine()) != null) {
-                    temperature = line + "\n";
+                while ((line = br.readLine()) != null) {
+                    temp = line;
                 }
-
-                int exitVal;
-                exitVal = p.waitFor();
-                if (exitVal == 0) {
-                    System.out.println("Success!");
-                    System.out.println(temperature);
-                }
-                return temperature;
-
+                br.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }catch (InterruptedException e) {
-                e.printStackTrace();
             }
-            return temperature;
+            return temp;
         }
 
         /*public static String getTime() {
@@ -113,9 +96,13 @@ public abstract class Messages {
         @Override
         public void writeTo(DataOutputStream dos) {
             int typeM = typeMessage().ordinal();
+            String reply;
             try {
+                reply = /*getTime()+" "+*/getTemperature();
+                System.out.println("ReplyServer: typeM:"+typeM);
+                System.out.println("ReplyServer: "+reply);
                 dos.writeInt(typeM);
-                dos.writeUTF(/*getTime()+" "+*/getTemperature());
+                dos.writeUTF(reply);
                 dos.flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -155,4 +142,5 @@ public abstract class Messages {
         }
         // peticion del cliente hacia el server
     }
+
 }

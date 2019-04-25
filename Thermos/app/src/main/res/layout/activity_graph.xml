@@ -15,10 +15,19 @@
         android:src="@drawable/ic_infograph01"/>
 
     <TextView
+        android:paddingTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/title_graph"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
+        android:textSize="50dp"/>
+
+    <TextView
+        android:paddingTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/alarm_title_graph"
+        android:layout_gravity="center"
         android:textSize="50dp"/>
 
     <com.jjoe64.graphview.GraphView
@@ -26,5 +35,56 @@
         android:layout_height="200dip"
         android:id="@+id/graph"
         android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/login_textv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:text="Mete una IP y PUERTO manualmente"
+        android:layout_marginTop="30dp"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:hint="IP"
+            android:textSize="30sp"
+            android:id="@+id/ip_edittext"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:hint="PORT"
+            android:textSize="30sp"
+            android:id="@+id/port_edittext"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Mostrar grafica"
+            android:textSize="30sp"
+            android:onClick="manualRequest"
+            android:id="@+id/manual_request_button"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="ALARMA"
+            android:textSize="30sp"
+            android:id="@+id/alarm_edittext"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Establecer alarma"
+            android:textSize="30sp"
+            android:onClick="setAlarm"
+            android:id="@+id/alarm_button"/>
+    </LinearLayout>
 
 </android.widget.LinearLayout>

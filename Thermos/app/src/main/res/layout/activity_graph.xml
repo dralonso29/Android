@@ -20,21 +20,32 @@
         android:layout_height="wrap_content"
         android:id="@+id/title_graph"
         android:layout_gravity="center"
-        android:textSize="50dp"/>
+        android:textSize="40sp"/>
 
     <TextView
         android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/alarm_title_graph"
         android:layout_gravity="center"
-        android:textSize="50dp"/>
+        android:textSize="50sp" />
 
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
         android:layout_height="200dip"
         android:id="@+id/graph"
         android:visibility="gone"/>
+
+    <TextView
+        android:paddingTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/legend"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:text="Temperaturas: Verde = ok, Naranja = warning, Rojo = danger"
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/login_textv"

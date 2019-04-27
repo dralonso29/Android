@@ -50,6 +50,9 @@ public class GraphActivity extends AppCompatActivity {
         int port;
         int alarm;
         ArrayList<Integer> tempAL;
+        saveMachine(){
+            this.machine = null;
+        }
 
         private String getMachine(){
             return machine;
@@ -84,6 +87,7 @@ public class GraphActivity extends AppCompatActivity {
 
     private void showGraph(String machine) {
         TextView title = findViewById(R.id.title_graph);
+        TextView legend = findViewById(R.id.legend);
         FilesMachines.checkExternalStorage();
         String filename = machine+".txt";
 
@@ -91,16 +95,24 @@ public class GraphActivity extends AppCompatActivity {
             File file = FilesMachines.getFile(machine, this);
             sm.tempAL = FilesMachines.readFrom(file);
 
-            setColorPoints(sm.tempAL, sm.getAlarm());
-
+            GraphView graph = findViewById(R.id.graph);
+            float title_size = 60;
+            setTitleGraph(graph, title_size);
+            setAxis(graph);
+            setColorPoints(graph, sm.tempAL, sm.getAlarm());
+            graph.getViewport().setScalable(true);
+            graph.getViewport().setScalableY(true);
+            graph.getViewport().setScrollable(true);
+            graph.getViewport().setScrollableY(true);
+            legend.setVisibility(View.VISIBLE);
             //No se por que no funciona lo de pulsar en cada boton, si supuestamente le paso el PointsGraphSeries
 
-            /*DataPoint[] dp = FilesMachines.getDataPoint();
+            DataPoint[] dp = FilesMachines.getDataPoint();
             PointsGraphSeries<DataPoint> series = new PointsGraphSeries<DataPoint>(dp);
-            showToastPoint(series);*/
+            showToastPoint(series);
             return;
         }
-        title.setText("OOOPS: No hay datos. Pulsa el boton de actualizar");
+        title.setText("No hay datos. Pulsa el boton de actualizar");
         /*GraphView graph = (GraphView) findViewById(R.id.graph);
         graph.setVisibility(View.VISIBLE);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
@@ -113,8 +125,22 @@ public class GraphActivity extends AppCompatActivity {
         graph.addSeries(series);*/
     }
 
-    public void setColorPoints(ArrayList<Integer> tempAL, int alarm){
-        GraphView graph = findViewById(R.id.graph);
+    private void setAxis(GraphView graph) {
+        float distanceY = 1.3f;
+
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("Medida");
+        graph.getGridLabelRenderer().setVerticalAxisTitle("Temperatura");
+        graph.getGridLabelRenderer().setLabelsSpace(10);
+        graph.setScaleY(distanceY);
+    }
+
+    private void setTitleGraph(GraphView graph, float size) {
+        graph.setTitle("Maquina "+sm.getMachine());
+        graph.setTitleTextSize(size);
+
+    }
+
+    public void setColorPoints(GraphView graph, ArrayList<Integer> tempAL, int alarm){
         PointsGraphSeries<DataPoint> series;
         graph.setVisibility(View.VISIBLE);
 
@@ -158,7 +184,9 @@ public class GraphActivity extends AppCompatActivity {
             sm.setAlarm(alarm);
             String title = "Alarma establecida en "+sm.getAlarm()+" grados";
             setAlarmTitle(title);
-            showGraph(sm.getMachine());
+            if (sm.getMachine() != null) {
+                showGraph(sm.getMachine());
+            }
             return;
         }
         String mymsg = "Alarma invalida, prueba otra vez";
@@ -215,20 +243,12 @@ public class GraphActivity extends AppCompatActivity {
             sm.setMachine(machine);
             setVisibleUpdate(true, gMenu);
             //getTemp(sm.getMachine(machine), sm.getPort());
-            setTitleGraphActivity(machine);
             showGraph(machine);
             return;
         }
         String mymsg = "Revisa los datos...";
         msg = Toast.makeText(GraphActivity.this, mymsg, time);
         msg.show();
-    }
-
-
-    private void setTitleGraphActivity(String machine){
-        String title = "MAQUINA: "+machine;
-        TextView textv = findViewById(R.id.title_graph);
-        textv.setText(title);
     }
 
     private void setVisibleUpdate(boolean visibility, Menu menu) {
@@ -271,7 +291,6 @@ public class GraphActivity extends AppCompatActivity {
                     sm.setPort(SERVER_PORT);
                     Log.d("GraphActivity", "La maquina se llama:  "+sm.getMachine());
                     setVisibilityImageInfo(View.GONE);
-                    setTitleGraphActivity(machine);
                     setVisibleUpdate(true, gMenu);
                     showGraph(sm.getMachine());
                     return true;

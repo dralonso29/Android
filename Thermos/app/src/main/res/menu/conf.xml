@@ -58,7 +58,7 @@
         <menu>
             <item
                 android:id="@+id/menu_local01"
-                android:title="10.1.135.183" />
+                android:title="10.0.0.8" />
         </menu>
     </item>
 

@@ -39,9 +39,10 @@ import java.util.Date;
 
 public class GraphActivity extends AppCompatActivity {
     private static final String MACHINES[] = {"alpha", "beta", "delta", "epsilon", "gamma", "zeta", "local"};
-    public static final int SERVER_PORT = 5000;
+    public static final int SERVER_PORT = 25029;
     private static final int ZERO_DEG = 0;
     private final int INIT_ALARM = 500;
+    public static final int ORANGE_COLOR = Color.rgb(255, 153, 102);
     private Menu gMenu;
 
     private class saveMachine {
@@ -118,21 +119,23 @@ public class GraphActivity extends AppCompatActivity {
         graph.setVisibility(View.VISIBLE);
 
         for (int i = 0; i< tempAL.size(); i++) {
-            if (tempAL.get(i) > alarm) { //RED
-                series = getPointsGraphSeries(i, tempAL.get(i));
+            series = getPointsGraphSeries(i, tempAL.get(i));
+            if (tempAL.get(i) > alarm) { // danger
                 series.setColor(Color.RED);
                 graph.addSeries(series);
                 continue;
+            }else if (tempAL.get(i) == alarm){ // warning
+                series.setColor(ORANGE_COLOR);
+                graph.addSeries(series);
+                continue;
             }
-            series = getPointsGraphSeries(i, tempAL.get(i));
-            series.setColor(Color.BLUE);
+            series.setColor(Color.GREEN); // ok
             graph.addSeries(series);
         }
     }
 
     public PointsGraphSeries<DataPoint> getPointsGraphSeries(int x, int y) {
-        PointsGraphSeries<DataPoint> series = new PointsGraphSeries<DataPoint>(new DataPoint[] { new DataPoint(x, y) });
-        return series;
+        return new PointsGraphSeries<DataPoint>(new DataPoint[] { new DataPoint(x, y) });
     }
 
     public void setAlarmTitle(String title) {

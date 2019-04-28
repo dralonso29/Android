@@ -88,14 +88,15 @@ public class GraphActivity extends AppCompatActivity {
     private void showGraph(String machine) {
         TextView title = findViewById(R.id.title_graph);
         TextView legend = findViewById(R.id.legend);
+        GraphView graph = findViewById(R.id.graph);
         FilesMachines.checkExternalStorage();
         String filename = machine+".txt";
 
         if (FilesMachines.isStorageAvaliable() && FilesMachines.fileExists(filename, this)){
             File file = FilesMachines.getFile(machine, this);
             sm.tempAL = FilesMachines.readFrom(file);
+            title.setVisibility(View.INVISIBLE);
 
-            GraphView graph = findViewById(R.id.graph);
             float title_size = 60;
             setTitleGraph(graph, title_size);
             setAxis(graph);
@@ -112,6 +113,8 @@ public class GraphActivity extends AppCompatActivity {
             showToastPoint(series);
             return;
         }
+        graph.setVisibility(View.GONE);
+        title.setVisibility(View.VISIBLE);
         title.setText("No hay datos. Pulsa el boton de actualizar");
         /*GraphView graph = (GraphView) findViewById(R.id.graph);
         graph.setVisibility(View.VISIBLE);

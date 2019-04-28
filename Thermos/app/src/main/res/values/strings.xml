@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Thermos</string>
+    <string name="help_info">Thermos es una app destinada a la monitorización de la temperatura de algunos de los ordenadores
+    de los laboratorios de la etsit. Para empezar a ver las gráficas, sal al menu principal y pulsa el boton start. Una vez ahí
+    se ofrece la oportunidad al usuario de ver la temperatura de algunas maquinas, predefinidas en el menu de la esquina superior derecha.
+    Por otro lado, el usuario puede poner una IP y PUERTO manualmente.</string>
 </resources>

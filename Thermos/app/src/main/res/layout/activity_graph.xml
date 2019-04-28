@@ -47,37 +47,49 @@
         android:text="Temperaturas: Verde = ok, Naranja = warning, Rojo = danger"
         android:textSize="20sp"/>
 
-    <TextView
+    <ImageView
         android:id="@+id/login_textv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="20sp"
-        android:text="Mete una IP y PUERTO manualmente"
+        android:src="@drawable/ic_optional01"
         android:layout_marginTop="30dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
+        android:paddingTop="10dp">
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:hint="IP"
-            android:textSize="30sp"
-            android:id="@+id/ip_edittext"/>
+            android:textSize="40sp"
+            android:id="@+id/ip_edittext"
+            android:padding="10dp"/>
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:hint="PORT"
-            android:textSize="30sp"
+            android:textSize="40sp"
+            android:padding="10dp"
             android:id="@+id/port_edittext"/>
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Mostrar grafica"
+            android:src="@drawable/ic_showgraph01"
+            android:backgroundTint="@android:color/transparent"
             android:textSize="30sp"
             android:onClick="manualRequest"
             android:id="@+id/manual_request_button"/>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,12 +99,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="ALARMA"
-            android:textSize="30sp"
+            android:textSize="40sp"
             android:id="@+id/alarm_edittext"/>
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Establecer alarma"
+            android:src="@drawable/ic_alarm_clock01"
+            android:backgroundTint="@android:color/transparent"
             android:textSize="30sp"
             android:onClick="setAlarm"
             android:id="@+id/alarm_button"/>

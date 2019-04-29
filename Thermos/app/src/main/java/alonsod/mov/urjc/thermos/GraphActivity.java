@@ -94,6 +94,7 @@ public class GraphActivity extends AppCompatActivity {
 
         if (FilesMachines.isStorageAvaliable() && FilesMachines.fileExists(filename, this)){
             File file = FilesMachines.getFile(machine, this);
+            graph.removeAllSeries(); // reset graph
             sm.tempAL = FilesMachines.readFrom(file);
             title.setVisibility(View.INVISIBLE);
 

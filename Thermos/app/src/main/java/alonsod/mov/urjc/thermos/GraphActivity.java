@@ -132,8 +132,8 @@ public class GraphActivity extends AppCompatActivity {
     private void setAxis(GraphView graph) {
         float distanceY = 1.3f;
 
-        graph.getGridLabelRenderer().setHorizontalAxisTitle("Medida");
-        graph.getGridLabelRenderer().setVerticalAxisTitle("Temperatura");
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("Número de medida");
+        graph.getGridLabelRenderer().setVerticalAxisTitle("Temperatura (℃)");
         graph.getGridLabelRenderer().setLabelsSpace(10);
         graph.setScaleY(distanceY);
     }

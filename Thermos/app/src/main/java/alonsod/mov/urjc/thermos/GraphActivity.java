@@ -1,5 +1,6 @@
 package alonsod.mov.urjc.thermos;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import com.jjoe64.graphview.series.Series;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
@@ -41,7 +43,7 @@ public class GraphActivity extends AppCompatActivity {
     private static final String MACHINES[] = {"alpha", "beta", "delta", "epsilon", "gamma", "zeta", "local"};
     public static final int SERVER_PORT = 25029;
     private static final int ZERO_DEG = 0;
-    private final int INIT_ALARM = 500;
+    private final int INIT_ALARM = 100;
     public static final int ORANGE_COLOR = Color.rgb(255, 153, 102);
     private Menu gMenu;
 
@@ -83,7 +85,33 @@ public class GraphActivity extends AppCompatActivity {
         //showGraph();
         sm = new saveMachine();
         sm.setAlarm(INIT_ALARM);
+        sm.setPort(SERVER_PORT);
+        if (savedInstanceState != null){
+            sm.setAlarm(savedInstanceState.getInt("alarm"));
+        }
+        Log.d("GraphActivity", "Inicialmente machine:"+sm.getMachine());
+        Log.d("GraphActivity", "Inicialmente port:"+sm.getPort());
+        Log.d("GraphActivity", "Inicialmente alarma:"+sm.getAlarm());
+
+        saveAlarm(INIT_ALARM);
+        savePort(SERVER_PORT);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("GraphActivity", "onStop()");
+        saveMachine(sm.getMachine());
+        saveAlarm(sm.getAlarm());
+        savePort(sm.getPort());
+        startService(new Intent(this, ThermosService.class));
+    }
+
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putInt("alarm", sm.getAlarm());
+    }
+
 
     private void showGraph(String machine) {
         TextView title = findViewById(R.id.title_graph);
@@ -117,16 +145,6 @@ public class GraphActivity extends AppCompatActivity {
         graph.setVisibility(View.GONE);
         title.setVisibility(View.VISIBLE);
         title.setText("No hay datos. Pulsa el boton de actualizar");
-        /*GraphView graph = (GraphView) findViewById(R.id.graph);
-        graph.setVisibility(View.VISIBLE);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
-        graph.addSeries(series);*/
     }
 
     private void setAxis(GraphView graph) {
@@ -188,6 +206,7 @@ public class GraphActivity extends AppCompatActivity {
             sm.setAlarm(alarm);
             String title = "Alarma establecida en "+sm.getAlarm()+" grados";
             setAlarmTitle(title);
+            saveAlarm(sm.getAlarm());
             if (sm.getMachine() != null) {
                 showGraph(sm.getMachine());
             }
@@ -196,6 +215,43 @@ public class GraphActivity extends AppCompatActivity {
         String mymsg = "Alarma invalida, prueba otra vez";
         msg = Toast.makeText(GraphActivity.this, mymsg, time);
         msg.show();
+    }
+    private void saveAlarm(int alarm) {
+        String FILENAME = "save_Alarm";
+
+        try {
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            fos.write(alarm);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveMachine(String machine) {
+        String FILENAME = "save_Machine";
+        machine += "";
+        try {
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            fos.write(machine.getBytes());
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void savePort(int port) {
+        String FILENAME = "save_Port";
+        String sPort = port+"";
+
+        try {
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            fos.write(sPort.getBytes());
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean isInteger(String alarmS) {

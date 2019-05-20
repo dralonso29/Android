@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.ParseException;
@@ -43,7 +44,15 @@ public class GraphActivity extends AppCompatActivity {
     private static final String MACHINES[] = {"alpha", "beta", "delta", "epsilon", "gamma", "zeta", "local"};
     public static final int SERVER_PORT = 25029;
     private static final int ZERO_DEG = 0;
+    private static final int MAX_SPLIT = 4;
+    private static final int MAX_IP_NUM = 255;
+    private static final int MIN_IP_NUM = 0;
+    private static final int MAX_PORT = 65535;
+    private static final int MIN_PORT = 1025;
+    private static final int MAX_PORT_LEN = 5;
     private final int INIT_ALARM = 100;
+    private static final float TITLE_SIZE = 60;
+    private static final int TIMEOUT = 3000;
     public static final int ORANGE_COLOR = Color.rgb(255, 153, 102);
     private Menu gMenu;
 
@@ -52,8 +61,11 @@ public class GraphActivity extends AppCompatActivity {
         int port;
         int alarm;
         ArrayList<Integer> tempAL;
+        boolean tryConnection;
+
         saveMachine(){
             this.machine = null;
+            this.tryConnection = true;
         }
 
         private String getMachine(){
@@ -74,6 +86,12 @@ public class GraphActivity extends AppCompatActivity {
         private void setAlarm(int a){
             alarm = a;
         }
+
+        private void setAttemptConnect(boolean b) {
+            tryConnection = b;
+        }
+        private boolean getAttemptConnect(){return tryConnection;}
+
     }
     saveMachine sm;
 
@@ -87,12 +105,15 @@ public class GraphActivity extends AppCompatActivity {
         sm.setAlarm(INIT_ALARM);
         sm.setPort(SERVER_PORT);
         if (savedInstanceState != null){
+            sm.setMachine(savedInstanceState.getString("machine"));
             sm.setAlarm(savedInstanceState.getInt("alarm"));
+            showGraph(sm.getMachine());
         }
         Log.d("GraphActivity", "Inicialmente machine:"+sm.getMachine());
         Log.d("GraphActivity", "Inicialmente port:"+sm.getPort());
         Log.d("GraphActivity", "Inicialmente alarma:"+sm.getAlarm());
 
+        setAlarmTitle();
         saveAlarm(INIT_ALARM);
         savePort(SERVER_PORT);
     }
@@ -109,6 +130,7 @@ public class GraphActivity extends AppCompatActivity {
 
     public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
+        state.putString("machine", sm.getMachine());
         state.putInt("alarm", sm.getAlarm());
     }
 
@@ -121,13 +143,14 @@ public class GraphActivity extends AppCompatActivity {
         String filename = machine+".txt";
 
         if (FilesMachines.isStorageAvaliable() && FilesMachines.fileExists(filename, this)){
+            setVisibilityImageInfo(View.GONE);
             File file = FilesMachines.getFile(machine, this);
             graph.removeAllSeries(); // reset graph
             sm.tempAL = FilesMachines.readFrom(file);
             title.setVisibility(View.INVISIBLE);
 
-            float title_size = 60;
-            setTitleGraph(graph, title_size);
+            //float title_size = 60;
+            setTitleGraph(graph, TITLE_SIZE);
             setAxis(graph);
             setColorPoints(graph, sm.tempAL, sm.getAlarm());
             graph.getViewport().setScalable(true);
@@ -135,7 +158,6 @@ public class GraphActivity extends AppCompatActivity {
             graph.getViewport().setScrollable(true);
             graph.getViewport().setScrollableY(true);
             legend.setVisibility(View.VISIBLE);
-            //No se por que no funciona lo de pulsar en cada boton, si supuestamente le paso el PointsGraphSeries
 
             DataPoint[] dp = FilesMachines.getDataPoint();
             PointsGraphSeries<DataPoint> series = new PointsGraphSeries<DataPoint>(dp);
@@ -186,7 +208,11 @@ public class GraphActivity extends AppCompatActivity {
         return new PointsGraphSeries<DataPoint>(new DataPoint[] { new DataPoint(x, y) });
     }
 
-    public void setAlarmTitle(String title) {
+    public void setAlarmTitle() {
+        String title = "No hay alarma";
+        if (sm.getAlarm() < INIT_ALARM){
+            title = "Alarma establecida en "+sm.getAlarm()+" grados";;
+        }
         TextView titleAlarm = findViewById(R.id.alarm_title_graph);
         titleAlarm.setText(title);
     }
@@ -197,6 +223,9 @@ public class GraphActivity extends AppCompatActivity {
         int time = Toast.LENGTH_SHORT;
         Toast msg;
         if (!isInteger(alarmS)){
+            String mymsg = "Introduce un numero entero, por favor";
+            msg = Toast.makeText(GraphActivity.this, mymsg, time);
+            msg.show();
             return;
         }
         int alarm = Integer.parseInt(alarmS);
@@ -204,8 +233,7 @@ public class GraphActivity extends AppCompatActivity {
         Log.d("GraphActivity", "Alarma vale: "+alarm);
         if (alarm >= ZERO_DEG && alarm < INIT_ALARM) {
             sm.setAlarm(alarm);
-            String title = "Alarma establecida en "+sm.getAlarm()+" grados";
-            setAlarmTitle(title);
+            setAlarmTitle();
             saveAlarm(sm.getAlarm());
             if (sm.getMachine() != null) {
                 showGraph(sm.getMachine());
@@ -254,20 +282,6 @@ public class GraphActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isInteger(String alarmS) {
-        int time = Toast.LENGTH_SHORT;
-        Toast msg;
-        try{
-            Integer.parseInt(alarmS);
-            return true;
-        }catch (NumberFormatException e){
-            String mymsg = "Introduce un numero entero, por favor";
-            msg = Toast.makeText(GraphActivity.this, mymsg, time);
-            msg.show();
-            return false;
-        }
-    }
-
     private void showToastPoint(PointsGraphSeries<DataPoint> series) {
 
         series.setOnDataPointTapListener(new OnDataPointTapListener() {
@@ -297,9 +311,20 @@ public class GraphActivity extends AppCompatActivity {
         Toast msg;
 
         if (machine.length() > 0 && portstr.length() > 0){
+            if (!isIPOk(machine)){
+                String mymsg = "¡IP invalida!";
+                msg = Toast.makeText(GraphActivity.this, mymsg, time);
+                msg.show();
+                return;
+            }
+            if (!isPortOk(portstr)) {
+                String mymsg = "¡Puerto invalido!";
+                msg = Toast.makeText(GraphActivity.this, mymsg, time);
+                msg.show();
+                return;
+            }
             port = Integer.parseInt(portstr);
             sm.setPort(port);
-            setVisibilityImageInfo(View.GONE);
             sm.setMachine(machine);
             setVisibleUpdate(true, gMenu);
             //getTemp(sm.getMachine(machine), sm.getPort());
@@ -309,6 +334,48 @@ public class GraphActivity extends AppCompatActivity {
         String mymsg = "Revisa los datos...";
         msg = Toast.makeText(GraphActivity.this, mymsg, time);
         msg.show();
+    }
+
+    private boolean isIPOk(String ip) {
+        Log.d("GraphActivity", "La ip a trocear es: "+ip);
+        boolean okIP = false;
+        String[] splited = ip.split("\\.", MAX_SPLIT);
+        Log.d("GraphActivity", "Despues de trocear la longitud es: "+splited.length);
+        if (splited.length == MAX_SPLIT){
+            for (int i = 0; i <= MAX_SPLIT - 1; i++){
+                Log.d("GraphActivity", "splited["+i+"] = "+splited[i]);
+                Log.d("GraphActivity", "isInteger: "+isInteger(splited[i]));
+                Log.d("GraphActivity", "isLoweOrEqualThan: "+isBetweenTwo(splited[i], MAX_IP_NUM, MIN_IP_NUM));
+                if (isInteger(splited[i]) && isBetweenTwo(splited[i], MAX_IP_NUM, MIN_IP_NUM)) {
+                    okIP = true;
+                    continue;
+                }
+                return false;
+            }
+        }
+        Log.d("GraphActivity", "Al final okIP --> "+okIP);
+        return okIP;
+    }
+
+    private boolean isBetweenTwo(String s, int max, int min) {
+        int num = Integer.parseInt(s);
+        return num <= max && num >= min;
+    }
+
+    private boolean isPortOk(String port) {
+        if (port.length() > MAX_PORT_LEN){
+            return false;
+        }
+        return isInteger(port) && isBetweenTwo(port, MAX_PORT, MIN_PORT);
+    }
+
+    private boolean isInteger(String s) {
+        try{
+            Integer.parseInt(s);
+        }catch (NumberFormatException e){
+            return false;
+        }
+        return true;
     }
 
     private void setVisibleUpdate(boolean visibility, Menu menu) {
@@ -350,7 +417,6 @@ public class GraphActivity extends AppCompatActivity {
                     sm.setMachine(machine);
                     sm.setPort(SERVER_PORT);
                     Log.d("GraphActivity", "La maquina se llama:  "+sm.getMachine());
-                    setVisibilityImageInfo(View.GONE);
                     setVisibleUpdate(true, gMenu);
                     showGraph(sm.getMachine());
                     return true;
@@ -366,7 +432,8 @@ public class GraphActivity extends AppCompatActivity {
             @Override
             public void run(){
                 try {
-                    Socket s = new Socket(ip, PORT);
+                    Socket s = new Socket();
+                    s.connect(new InetSocketAddress(ip, PORT), TIMEOUT);
                     DataInputStream dis = new DataInputStream(s.getInputStream());
                     DataOutputStream dos = new DataOutputStream(s.getOutputStream());
                     Messages.RequestClient rc = new Messages.RequestClient();
@@ -382,21 +449,37 @@ public class GraphActivity extends AppCompatActivity {
                         }
                         //replyToServer.writeTo(dos);
                     }
+                    sm.setAttemptConnect(true);
                 }catch (ConnectException e) {
                     System.out.println("Connection refused "+ e);
+                    Log.d("GraphActivity", "Connection refused: cannot connect: ");
+                    sm.setAttemptConnect(false);
                 }catch (UnknownHostException e) {
                     System.out.println("Cannot connect to host "+ e);
                 }catch (IOException e) {
                     System.out.println("IOExcepton "+ e);
+                    Log.d("GraphActivity", "Connection refused: IOException");
+                    sm.setAttemptConnect(false);
                 }
             }
         };
         c.start();
         try {
             c.join(); //we must wait thread because of reading from file later
+            if(!sm.getAttemptConnect()){
+                notifyErrorConnect();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void notifyErrorConnect() {
+        int time = Toast.LENGTH_SHORT;
+        Toast msg;
+        String mymsg = "Error: Connection refused";
+        msg = Toast.makeText(GraphActivity.this, mymsg, time);
+        msg.show();
     }
 
     private boolean isMachineName(String nameItem) {

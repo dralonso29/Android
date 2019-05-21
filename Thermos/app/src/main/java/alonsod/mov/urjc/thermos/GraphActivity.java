@@ -125,7 +125,7 @@ public class GraphActivity extends AppCompatActivity {
         savePort(SERVER_PORT);
     }
 
-    @Override
+    /*@Override
     protected void onStop() {
         super.onStop();
         Log.d("GraphActivity", "onStop()");
@@ -139,10 +139,10 @@ public class GraphActivity extends AppCompatActivity {
             startService(intent);
         }
     }
-
+*/
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onDestroy() {
+        super.onDestroy();
         Log.d("GraphActivity", "La alarma vale en onResume(): "+sm.getAlarm());
         if (sm.getShowNotifications()){
             Log.d("GraphActivity", "Paramos el servicio...");
@@ -152,10 +152,11 @@ public class GraphActivity extends AppCompatActivity {
 
 
     public void setNotifications(View view) {
-        if (sm.getShowNotifications()){
-            sm.setShowNotifications(false);
-            return;
-        }
+        saveMachine(sm.getMachine());
+        saveAlarm(sm.getAlarm());
+        savePort(sm.getPort());
+        Log.d("GraphActivity", "Lanzamos el servicio...");
+        startService(new Intent(this, ThermosService.class));
         sm.setShowNotifications(true);
     }
 
@@ -326,7 +327,7 @@ public class GraphActivity extends AppCompatActivity {
     }
 
     private void setVisibilityImageInfo(int v) {
-        String img_info_graph = "ic_infograph01";
+        String img_info_graph = "ic_infograph03land";
         int id = getResources().getIdentifier(img_info_graph, "drawable", getPackageName());
         ImageView imgv = findViewById(R.id.info_graph);
         imgv.setImageResource(id);

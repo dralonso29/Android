@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,10 +63,12 @@ public class GraphActivity extends AppCompatActivity {
         int alarm;
         ArrayList<Integer> tempAL;
         boolean tryConnection;
+        boolean showNotifications;
 
         saveMachine(){
             this.machine = null;
             this.tryConnection = true;
+            this.showNotifications = false;
         }
 
         private String getMachine(){
@@ -86,11 +89,14 @@ public class GraphActivity extends AppCompatActivity {
         private void setAlarm(int a){
             alarm = a;
         }
-
         private void setAttemptConnect(boolean b) {
             tryConnection = b;
         }
         private boolean getAttemptConnect(){return tryConnection;}
+        private void setShowNotifications(boolean b){
+            showNotifications = b;
+        }
+        private boolean getShowNotifications(){return showNotifications;}
 
     }
     saveMachine sm;
@@ -107,6 +113,7 @@ public class GraphActivity extends AppCompatActivity {
         if (savedInstanceState != null){
             sm.setMachine(savedInstanceState.getString("machine"));
             sm.setAlarm(savedInstanceState.getInt("alarm"));
+            sm.setShowNotifications(savedInstanceState.getBoolean("notify"));
             showGraph(sm.getMachine());
         }
         Log.d("GraphActivity", "Inicialmente machine:"+sm.getMachine());
@@ -125,13 +132,38 @@ public class GraphActivity extends AppCompatActivity {
         saveMachine(sm.getMachine());
         saveAlarm(sm.getAlarm());
         savePort(sm.getPort());
-        startService(new Intent(this, ThermosService.class));
+        Log.d("GraphActivity", "La alarma vale en onStop(): "+sm.getAlarm() );
+        if (sm.getShowNotifications()){
+            Log.d("GraphActivity", "Lanzamos el servicio...");
+            Intent intent = new Intent(this, ThermosService.class);
+            startService(intent);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("GraphActivity", "La alarma vale en onResume(): "+sm.getAlarm());
+        if (sm.getShowNotifications()){
+            Log.d("GraphActivity", "Paramos el servicio...");
+            stopService(new Intent(this, ThermosService.class));
+        }
+    }
+
+
+    public void setNotifications(View view) {
+        if (sm.getShowNotifications()){
+            sm.setShowNotifications(false);
+            return;
+        }
+        sm.setShowNotifications(true);
     }
 
     public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         state.putString("machine", sm.getMachine());
         state.putInt("alarm", sm.getAlarm());
+        state.putBoolean("notify", sm.getShowNotifications());
     }
 
 

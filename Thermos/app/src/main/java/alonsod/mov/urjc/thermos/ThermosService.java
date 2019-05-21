@@ -82,7 +82,10 @@ public class ThermosService extends IntentService {
                         Log.d("ThermosService", "Respuesta: " + answer);
                         int temp = Integer.parseInt(answer)/1000;
                         if (temp >= alarm) {
-                            showNotification(machine, temp, alarm);
+                            String textTitle = "¡Atención, hay una máquina calentándose!";
+                            String textContent = "Maquina: "+machine+" con temperatura de "+temp+
+                                    " grados, ha superado la alarma de "+alarm+" grados";
+                            showNotification(textTitle, textContent);
                             runService = false;
                         }
                     } catch (IOException e) {
@@ -130,13 +133,15 @@ public class ThermosService extends IntentService {
                     e.printStackTrace();
                 }
             }
+        }else{
+            String textTitle = "¡Revisa los datos!";
+            String textContent = "Es posible que haya algún dato erroneo";
+            showNotification(textTitle, textContent);
         }
         stopSelf();
     }
 
-    private void showNotification(String machine, int temperatura, int alarm) {
-        String textTitle = "¡Atención, hay una máquina calentándose!";
-        String textContent = "Maquina: "+machine+" con temperatura de "+temperatura+" grados, ha superado la alarma de "+alarm+" grados";
+    private void showNotification(String textTitle, String textContent) {
         Intent intent = new Intent(this, GraphActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 

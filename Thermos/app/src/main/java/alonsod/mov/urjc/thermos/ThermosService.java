@@ -3,6 +3,7 @@ package alonsod.mov.urjc.thermos;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -15,13 +16,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class ThermosService extends IntentService {
 
     private static final int NOTIFICATION_ID = 7777;
-    private static final int WAITING_TIME = 5*1000;
+    private static final int WAITING_TIME = 10*1000;
+    private static final int TIMEOUT = 4000;
+    private boolean isServiceAlive;
 
     public void getTemp(final String ip, final int PORT) {
         Log.d("ThermosService", "Dentro de getTemp");
@@ -29,9 +33,11 @@ public class ThermosService extends IntentService {
             @Override
             public void run(){
                 try {
-                    while(true) {
+                    while(isServiceAlive) {
+                        Log.d("ThermosService", "getTemp: proceso de pedir temperatura");
                         long endTime = System.currentTimeMillis() + WAITING_TIME;
-                        Socket s = new Socket(ip, PORT);
+                        Socket s = new Socket();
+                        s.connect(new InetSocketAddress(ip, PORT), TIMEOUT);
                         DataInputStream dis = new DataInputStream(s.getInputStream());
                         DataOutputStream dos = new DataOutputStream(s.getOutputStream());
                         //Log.d("ThermosService","Hay que segui con el servicio? --> "+checkAlarm(dis, dos, ip));
@@ -45,15 +51,19 @@ public class ThermosService extends IntentService {
                         sleep(endTime - System.currentTimeMillis());
                         Log.d("ThermosService", "Esperando...");
                     }
-
+                    Log.d("ThermosService", "getTemp: ya no pedimos temperatura");
                 }catch (ConnectException e) {
                     System.out.println("Connection refused "+ e);
+                    Log.d("ThermosService", "Connection refused...");
                 }catch (UnknownHostException e) {
                     System.out.println("Cannot connect to host "+ e);
+                    Log.d("ThermosService", "Unknown host...");
                 }catch (IOException e) {
                     System.out.println("IOExcepton "+ e);
+                    Log.d("ThermosService", "IOException...");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Log.d("ThermosService", "InterruptedException...");
                 }
             }
 
@@ -91,6 +101,15 @@ public class ThermosService extends IntentService {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        synchronized (this){
+            isServiceAlive = false;
+        }
+        Log.d("ThermosService", "onDestroy: isServiceAlive: "+isServiceAlive);
+    }
+
     public ThermosService() {
         super("HelloThermosService");
     }
@@ -99,8 +118,10 @@ public class ThermosService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         String ip = getMachine();
         int port  = getPort();//25029;
+        isServiceAlive = true;
         Log.d("ThermosService", "Hacemos getMachine: "+getMachine());
         Log.d("ThermosService", "Hacemos getPort: "+getPort());
+        Log.d("ThermosService", "onHandleIntent: isServiceAlive: "+isServiceAlive);
         if ((ip != null) && !ip.equals("null")) {
             synchronized (this) {
                 try {
@@ -110,20 +131,23 @@ public class ThermosService extends IntentService {
                 }
             }
         }
+        stopSelf();
     }
 
     private void showNotification(String machine, int temperatura, int alarm) {
         String textTitle = "¡Atención, hay una máquina calentándose!";
         String textContent = "Maquina: "+machine+" con temperatura de "+temperatura+" grados, ha superado la alarma de "+alarm+" grados";
+        Intent intent = new Intent(this, GraphActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        NotificationManager nmng =
-                (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager nmng = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
         Notification notification = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_sentiment_dissatisfied_black_24dp)
                 .setContentTitle(textTitle)
                 .setContentText(textContent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
                 .build();
 
         nmng.notify(NOTIFICATION_ID, notification);

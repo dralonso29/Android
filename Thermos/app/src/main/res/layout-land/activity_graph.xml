@@ -1,129 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context=".GraphActivity">
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/info_graph"
-        android:src="@drawable/ic_infograph01"/>
-
-    <TextView
-        android:paddingTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/title_graph"
-        android:layout_gravity="center"
-        android:textSize="20sp"/>
-
-    <TextView
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/alarm_title_graph"
-        android:layout_gravity="center"
-        android:textSize="50sp" />
-
-    <com.jjoe64.graphview.GraphView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dip"
-        android:id="@+id/graph"
-        android:visibility="gone"/>
-
-    <TextView
-        android:paddingTop="20dp"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/legend"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:text="Temperaturas: Verde = ok, Naranja = warning, Rojo = danger"
-        android:textSize="20sp"/>
+        android:orientation="vertical"
+        android:layout_gravity="center">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/info_graph"
+            android:src="@drawable/ic_infograph01"/>
 
-    <ImageView
-        android:id="@+id/login_textv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_optional01"
-        android:layout_marginTop="30dp"/>
+        <TextView
+            android:paddingTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/title_graph"
+            android:layout_gravity="center"
+            android:textSize="20sp"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:paddingBottom="20dp"
-        android:paddingTop="10dp">
+        <TextView
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/alarm_title_graph"
+            android:layout_gravity="center"
+            android:textSize="50sp" />
 
-        <EditText
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+            android:id="@+id/graph"
+            android:visibility="gone"/>
+
+        <TextView
+            android:paddingTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/legend"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:text="Temperaturas: Verde = ok, Naranja = warning, Rojo = danger"
+            android:textSize="20sp"/>
+
+        <ImageView
+            android:id="@+id/login_textv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:hint="IP"
-            android:textSize="40sp"
-            android:id="@+id/ip_edittext"
-            android:padding="10dp"/>
-        <EditText
+            android:src="@drawable/ic_optional01"
+            android:layout_marginTop="30dp"/>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:hint="PORT"
-            android:textSize="40sp"
-            android:padding="10dp"
-            android:id="@+id/port_edittext"/>
-        <ImageButton
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:paddingTop="10dp">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="IP"
+                android:textSize="40sp"
+                android:id="@+id/ip_edittext"
+                android:padding="10dp"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="PORT"
+                android:textSize="40sp"
+                android:padding="10dp"
+                android:id="@+id/port_edittext"/>
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_showgraph01"
+                android:backgroundTint="@android:color/transparent"
+                android:textSize="30sp"
+                android:onClick="manualRequest"
+                android:id="@+id/manual_request_button"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_showgraph01"
-            android:backgroundTint="@android:color/transparent"
-            android:textSize="30sp"
-            android:onClick="manualRequest"
-            android:id="@+id/manual_request_button"/>
-    </LinearLayout>
+            android:orientation="horizontal">
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="ALARMA"
+                android:textSize="40sp"
+                android:id="@+id/alarm_edittext"/>
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_alarm_clock01"
+                android:backgroundTint="@android:color/transparent"
+                android:textSize="30sp"
+                android:onClick="setAlarm"
+                android:id="@+id/alarm_button"/>
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-        <EditText
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="ALARMA"
-            android:textSize="40sp"
-            android:id="@+id/alarm_edittext"/>
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_alarm_clock01"
-            android:backgroundTint="@android:color/transparent"
-            android:textSize="30sp"
-            android:onClick="setAlarm"
-            android:id="@+id/alarm_button"/>
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/mostrar_notificaciones"
+                android:onClick="setNotifications"
+                android:text="Mostrar notificaciones" />
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:id="@+id/mostrar_notificaciones"
-            android:onClick="setNotifications"
-            android:text="Mostrar notificaciones" />
-    </LinearLayout>
-
-
-</android.widget.LinearLayout>
+</ScrollView>
